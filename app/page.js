@@ -38,15 +38,17 @@ export default function HomePage() {
       </aside>
 
       {/* Konten kanan */}
-      <main className="page-main" style={{ display: 'flex', flexDirection: 'column' }}>
-
+      <main
+        className="page-main"
+        style={{ display: 'flex', flexDirection: 'column' }}
+      >
         <div className="name-bar">
           <p>Research Portfolio</p>
         </div>
 
         <div style={{
           flex:            1,
-          padding:         'clamp(28px, 5vw, 48px) clamp(20px, 5vw, 40px)',
+          padding:         'clamp(28px, 5vw, 48px) clamp(16px, 5vw, 40px)',
           backgroundColor: '#f0eeea',
         }}>
           <p style={{
@@ -86,7 +88,6 @@ export default function HomePage() {
             Lihat karya →
           </a>
         </div>
-
       </main>
     </div>
   )
