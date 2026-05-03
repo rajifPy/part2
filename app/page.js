@@ -12,7 +12,7 @@ export default function HomePage() {
         style={{ backgroundColor: '#8a7d3a' }}
       >
         <div>
-          <h1 className="sidebar-heading" style={{ marginBottom: '32px' }}>
+          <h1 className="sidebar-heading" style={{ marginBottom: '28px' }}>
             {siteConfig.name.split(' ').map((word, i) => (
               <span key={i} style={{ display: 'block' }}>{word.toUpperCase()}</span>
             ))}
@@ -46,7 +46,7 @@ export default function HomePage() {
 
         <div style={{
           flex:            1,
-          padding:         '48px 40px',
+          padding:         'clamp(28px, 5vw, 48px) clamp(20px, 5vw, 40px)',
           backgroundColor: '#f0eeea',
         }}>
           <p style={{
