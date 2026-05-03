@@ -2,6 +2,7 @@
 
 import Link            from 'next/link'
 import { usePathname } from 'next/navigation'
+import { useState }    from 'react'
 import { siteConfig }  from '@/data/config'
 
 const TAB_COLORS = {
@@ -14,7 +15,7 @@ const TAB_COLORS = {
 const TAB_TEXT_COLORS = {
   '/about':     '#f0eeea',
   '/news':      '#1a1a1a',
-  '/work':      '#1a1a1a',
+  '/work':      '#f0eeea',
   '/documents': '#f0eeea',
 }
 
@@ -26,6 +27,7 @@ function adjustAlpha(hexOrRgb, alpha) {
 
 export default function Navbar() {
   const pathname = usePathname()
+  const [menuOpen, setMenuOpen] = useState(false)
 
   return (
     <header style={{ position: 'sticky', top: 0, zIndex: 100 }}>
@@ -33,19 +35,43 @@ export default function Navbar() {
       <div style={{
         backgroundColor: '#1a1a1a',
         color:           '#f0eeea',
-        textAlign:       'center',
-        padding:         '10px 0',
+        display:         'flex',
+        alignItems:      'center',
+        justifyContent:  'space-between',
+        padding:         '0 20px',
+        height:          '44px',
         fontFamily:      'var(--font-body)',
-        fontWeight:      700,
-        fontSize:        'var(--text-sm)',
-        letterSpacing:   '0.18em',
-        textTransform:   'uppercase',
       }}>
-        {siteConfig.name}
+        <span style={{
+          fontWeight:    700,
+          fontSize:      'var(--text-sm)',
+          letterSpacing: '0.18em',
+          textTransform: 'uppercase',
+          flex:          1,
+          textAlign:     'center',
+        }}>
+          {siteConfig.name}
+        </span>
+
+        {/* Hamburger — mobile only */}
+        <button
+          onClick={() => setMenuOpen(o => !o)}
+          aria-label="Toggle menu"
+          style={{
+            display:     'none',
+            flexShrink:  0,
+            color:       '#f0eeea',
+            padding:     '6px',
+            marginLeft:  '8px',
+          }}
+          className="nav-hamburger"
+        >
+          {menuOpen ? '✕' : '☰'}
+        </button>
       </div>
 
-      {/* Tab navigasi */}
-      <nav style={{ display: 'flex' }}>
+      {/* Desktop tab nav */}
+      <nav className="nav-tabs" style={{ display: 'flex' }}>
         {siteConfig.nav.map(({ label, href }) => {
           const isActive  = pathname === href || pathname.startsWith(href + '/')
           const bg        = TAB_COLORS[href]      ?? '#ccc'
@@ -58,13 +84,13 @@ export default function Navbar() {
               style={{
                 flex:            1,
                 textAlign:       'center',
-                padding:         '18px 8px',
+                padding:         '14px 6px',
                 backgroundColor: bg,
                 color:           isActive ? textColor : adjustAlpha(textColor, 0.55),
                 fontFamily:      'var(--font-body)',
                 fontWeight:      700,
                 fontSize:        'var(--text-sm)',
-                letterSpacing:   '0.15em',
+                letterSpacing:   '0.12em',
                 textTransform:   'uppercase',
                 borderBottom:    isActive ? '4px solid rgba(0,0,0,0.25)' : '4px solid transparent',
                 transition:      'filter var(--transition-base)',
@@ -78,6 +104,51 @@ export default function Navbar() {
           )
         })}
       </nav>
+
+      {/* Mobile dropdown nav */}
+      {menuOpen && (
+        <nav className="nav-mobile" style={{
+          backgroundColor: '#1a1a1a',
+          display:         'flex',
+          flexDirection:   'column',
+          borderTop:       '1px solid rgba(240,238,234,0.1)',
+        }}>
+          {siteConfig.nav.map(({ label, href }) => {
+            const isActive = pathname === href || pathname.startsWith(href + '/')
+            const bg       = TAB_COLORS[href] ?? '#ccc'
+            return (
+              <Link
+                key={href}
+                href={href}
+                onClick={() => setMenuOpen(false)}
+                style={{
+                  padding:         '14px 24px',
+                  backgroundColor: isActive ? bg : 'transparent',
+                  color:           isActive ? (TAB_TEXT_COLORS[href] ?? '#f0eeea') : 'rgba(240,238,234,0.65)',
+                  fontFamily:      'var(--font-body)',
+                  fontWeight:      700,
+                  fontSize:        'var(--text-sm)',
+                  letterSpacing:   '0.12em',
+                  textTransform:   'uppercase',
+                  borderLeft:      isActive ? `4px solid rgba(255,255,255,0.3)` : '4px solid transparent',
+                }}
+              >
+                {label}
+              </Link>
+            )
+          })}
+        </nav>
+      )}
+
+      <style>{`
+        @media (max-width: 600px) {
+          .nav-hamburger { display: flex !important; }
+          .nav-tabs { display: none !important; }
+        }
+        @media (min-width: 601px) {
+          .nav-mobile { display: none !important; }
+        }
+      `}</style>
     </header>
   )
 }
