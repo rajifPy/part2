@@ -141,9 +141,13 @@ export default function WorkClient() {
           <button
             className="toc-toggle"
             onClick={() => setTocOpen(o => !o)}
+            aria-expanded={tocOpen}
+            aria-label="Table of contents"
           >
-            <span>Table of contents — {TOC_SECTIONS.find(s => s.id === activeId)?.label ?? 'WORK'}</span>
-            <span style={{ fontSize: '1rem' }}>{tocOpen ? '▲' : '▼'}</span>
+            <span>
+              {TOC_SECTIONS.find(s => s.id === activeId)?.label ?? 'WORK'}
+            </span>
+            <span style={{ fontSize: '0.8rem', flexShrink: 0 }}>{tocOpen ? '▲' : '▼'}</span>
           </button>
 
           {/* Mobile TOC dropdown */}
@@ -252,10 +256,10 @@ export default function WorkClient() {
                 </>
               ) : (
                 <>
-                  <span id="peer"     style={{ display:'block', scrollMarginTop:'80px' }} />
-                  <span id="chapters" style={{ display:'block' }} />
-                  <span id="reviews"  style={{ display:'block' }} />
-                  <span id="public"   style={{ display:'block' }} />
+                  <span id="peer"     style={{ display: 'block', scrollMarginTop: '80px' }} />
+                  <span id="chapters" style={{ display: 'block' }} />
+                  <span id="reviews"  style={{ display: 'block' }} />
+                  <span id="public"   style={{ display: 'block' }} />
                   {filteredPubs(pubFilter).length === 0 ? (
                     <p style={{
                       fontFamily: 'var(--font-body)',
