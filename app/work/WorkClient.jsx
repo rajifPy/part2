@@ -9,7 +9,6 @@ import { researchProjects } from '@/data/research'
 import { publications }     from '@/data/publications'
 import { teaching }         from '@/data/teaching'
 
-/* ── TOC links ─────────────────────────────────────────────── */
 const TOC_SECTIONS = [
   { id: 'research',     label: 'RESEARCH',                   indent: false },
   { id: 'publications', label: 'PUBLICATIONS',               indent: false },
@@ -22,7 +21,6 @@ const TOC_SECTIONS = [
   { id: 'guest',        label: 'Guest seminars & workshops', indent: true  },
 ]
 
-/* ── Filter / kategori publikasi ───────────────────────────── */
 const PUB_CATEGORIES = [
   { key: 'all',      label: 'All' },
   { key: 'peer',     label: 'Articles' },
@@ -36,50 +34,81 @@ export default function WorkClient() {
   const [activeId,  setActiveId]  = useState('research')
   const [pubFilter, setPubFilter] = useState('all')
   const [pubYear,   setPubYear]   = useState('all')
-
-  /* ── Intersection Observer untuk TOC active state ── */
+  const [tocOpen,   setTocOpen]   = useState(false)
   const observerRef = useRef(null)
 
   useEffect(() => {
-    const ids = TOC_SECTIONS.map(s => s.id)
+    const ids      = TOC_SECTIONS.map(s => s.id)
     const elements = ids.map(id => document.getElementById(id)).filter(Boolean)
 
     observerRef.current = new IntersectionObserver(
       (entries) => {
-        // Ambil section paling atas yang sedang terlihat
         const visible = entries
           .filter(e => e.isIntersecting)
           .sort((a, b) => a.boundingClientRect.top - b.boundingClientRect.top)
-        if (visible.length > 0) {
-          setActiveId(visible[0].target.id)
-        }
+        if (visible.length > 0) setActiveId(visible[0].target.id)
       },
       { rootMargin: '-10% 0px -60% 0px', threshold: 0 }
     )
-
     elements.forEach(el => observerRef.current.observe(el))
     return () => observerRef.current?.disconnect()
   }, [])
 
-  /* ── Kumpulkan semua tahun untuk filter ── */
   const allYears = [...new Set(
     Object.values(publications).flat().map(p => p.year)
   )].sort((a, b) => b - a)
 
-  /* ── Filter publikasi ── */
   const filteredPubs = (category) => {
     const list = category === 'all'
       ? Object.entries(publications).flatMap(([cat, items]) =>
           items.map(item => ({ ...item, _cat: cat }))
         )
       : publications[category] ?? []
-
-    return pubYear === 'all'
-      ? list
-      : list.filter(p => p.year === pubYear)
+    return pubYear === 'all' ? list : list.filter(p => p.year === pubYear)
   }
 
   const showAllPubs = pubFilter === 'all' && pubYear === 'all'
+
+  const handleTocClick = (id) => {
+    setTocOpen(false)
+    setTimeout(() => {
+      document.getElementById(id)?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+    }, 50)
+  }
+
+  const TocNav = ({ onLinkClick }) => (
+    <nav style={{ display: 'flex', flexDirection: 'column', gap: 0 }}>
+      {TOC_SECTIONS.map(({ id, label, indent }) => {
+        const isActive = activeId === id
+        return (
+          <a
+            key={id}
+            href={`#${id}`}
+            onClick={e => {
+              e.preventDefault()
+              onLinkClick?.(id)
+            }}
+            style={{
+              display:       'block',
+              fontFamily:    'var(--font-body)',
+              fontWeight:    !indent ? 700 : 400,
+              fontSize:      !indent ? 'var(--text-md)' : 'var(--text-sm)',
+              letterSpacing: '0.05em',
+              color:         isActive ? '#c94f35' : (indent ? '#777' : '#1a1a1a'),
+              padding:       indent ? '3px 0 3px 14px' : '6px 0',
+              borderLeft:    isActive ? '3px solid #c94f35' : '3px solid transparent',
+              paddingLeft:   indent
+                ? (isActive ? '11px' : '14px')
+                : (isActive ? '5px' : '0'),
+              transition:    'color 0.15s, border-color 0.15s',
+            }}
+          >
+            {label}
+          </a>
+        )
+      })}
+    </nav>
+  )
 
   return (
     <>
@@ -87,57 +116,15 @@ export default function WorkClient() {
 
       <div style={{ display: 'flex', minHeight: '100vh' }}>
 
-        {/* ── Sidebar kiri ─────────────────────────────── */}
-        <aside style={{
-          width:           '340px',
-          flexShrink:      0,
-          backgroundColor: '#e8e6e0',
-          padding:         '40px 32px',
-          position:        'sticky',
-          top:             '68px',
-          alignSelf:       'start',
-          minHeight:       'calc(100vh - 68px)',
-        }}>
-          <h1 style={{
-            fontFamily:    'var(--font-display)',
-            fontSize:      'clamp(4rem, 7vw, 6rem)',
-            lineHeight:    0.9,
-            letterSpacing: '0.02em',
-            marginBottom:  '40px',
-            color:         '#1a1a1a',
-          }}>WORK</h1>
-
-          {/* TOC dengan active state */}
-          <nav style={{ display: 'flex', flexDirection: 'column', gap: 0 }}>
-            {TOC_SECTIONS.map(({ id, label, indent }) => {
-              const isActive = activeId === id
-              return (
-                <a
-                  key={id}
-                  href={`#${id}`}
-                  style={{
-                    display:         'block',
-                    fontFamily:      'var(--font-body)',
-                    fontWeight:      !indent ? 700 : 400,
-                    fontSize:        !indent ? 'var(--text-md)' : 'var(--text-sm)',
-                    letterSpacing:   '0.06em',
-                    color:           isActive ? '#c94f35' : (indent ? '#777' : '#1a1a1a'),
-                    padding:         indent ? '3px 0 3px 14px' : '6px 0',
-                    borderLeft:      isActive ? '3px solid #c94f35' : '3px solid transparent',
-                    paddingLeft:     indent ? (isActive ? '11px' : '14px') : (isActive ? '5px' : '0'),
-                    transition:      'color 0.15s, border-color 0.15s',
-                  }}
-                  onMouseEnter={e => { if (!isActive) e.currentTarget.style.color = '#1a1a1a' }}
-                  onMouseLeave={e => { if (!isActive) e.currentTarget.style.color = indent ? '#777' : '#1a1a1a' }}
-                >
-                  {label}
-                </a>
-              )
-            })}
-          </nav>
-
-          {/* Social links */}
-          <div className="social-links dark" style={{ marginTop: '40px' }}>
+        {/* ── Desktop Sidebar ── */}
+        <aside className="work-sidebar">
+          <h1 className="work-sidebar__heading">WORK</h1>
+          <TocNav onLinkClick={(id) => {
+            setTimeout(() => {
+              document.getElementById(id)?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+            }, 50)
+          }} />
+          <div className="social-links dark" style={{ marginTop: '36px' }}>
             {Object.entries(siteConfig.links).map(([key, url]) => (
               <a key={key} href={url} target="_blank" rel="noopener noreferrer" className="dark">
                 {key}
@@ -147,8 +134,28 @@ export default function WorkClient() {
           </div>
         </aside>
 
-        {/* ── Konten utama ─────────────────────────────── */}
+        {/* ── Main Content ── */}
         <main style={{ flex: 1, minWidth: 0 }}>
+
+          {/* Mobile TOC toggle */}
+          <button
+            className="toc-toggle"
+            onClick={() => setTocOpen(o => !o)}
+          >
+            <span>Table of contents — {TOC_SECTIONS.find(s => s.id === activeId)?.label ?? 'WORK'}</span>
+            <span style={{ fontSize: '1rem' }}>{tocOpen ? '▲' : '▼'}</span>
+          </button>
+
+          {/* Mobile TOC dropdown */}
+          {tocOpen && (
+            <div style={{
+              backgroundColor: '#e8e6e0',
+              padding:         '16px 20px 20px',
+              borderBottom:    '2px solid #1a1a1a',
+            }}>
+              <TocNav onLinkClick={handleTocClick} />
+            </div>
+          )}
 
           {/* RESEARCH */}
           <section>
@@ -167,15 +174,7 @@ export default function WorkClient() {
             </div>
 
             {/* Filter bar */}
-            <div style={{
-              padding:        '16px 40px',
-              borderBottom:   '1px solid #d0cec8',
-              display:        'flex',
-              gap:            '8px',
-              flexWrap:       'wrap',
-              alignItems:     'center',
-              backgroundColor: '#f7f5f1',
-            }}>
+            <div className="pub-filter-bar">
               <div style={{ display: 'flex', gap: '6px', flexWrap: 'wrap' }}>
                 {PUB_CATEGORIES.map(({ key, label }) => (
                   <button
@@ -226,6 +225,7 @@ export default function WorkClient() {
                   color:           '#555',
                   cursor:          'pointer',
                   marginLeft:      'auto',
+                  minWidth:        '110px',
                 }}
               >
                 <option value="all">All years</option>
@@ -237,7 +237,6 @@ export default function WorkClient() {
 
             <div className="content-pad">
               {showAllPubs ? (
-                /* Mode default — tampilkan per sub-kategori */
                 <>
                   <SubBanner id="peer" label="Peer-reviewed articles" />
                   {publications.peer.map((item, i) => <PublicationItem key={i} item={item} />)}
@@ -252,14 +251,11 @@ export default function WorkClient() {
                   {publications.public.map((item, i) => <PublicationItem key={i} item={item} />)}
                 </>
               ) : (
-                /* Mode filter — tampilkan flat */
                 <>
-                  {/* Anchor dummy agar observer tetap dapat section ini */}
                   <span id="peer"     style={{ display:'block', scrollMarginTop:'80px' }} />
                   <span id="chapters" style={{ display:'block' }} />
                   <span id="reviews"  style={{ display:'block' }} />
                   <span id="public"   style={{ display:'block' }} />
-
                   {filteredPubs(pubFilter).length === 0 ? (
                     <p style={{
                       fontFamily: 'var(--font-body)',
@@ -284,14 +280,9 @@ export default function WorkClient() {
               <SectionBanner label="TEACHING" color="#6b1f3a" />
             </div>
             {teaching.lectured.map((item, i) => (
-              <ResearchCard
-                key={item.id}
-                item={item}
-                onClick={setModal}
-                colorIndex={i + 2}
-              />
+              <ResearchCard key={item.id} item={item} onClick={setModal} colorIndex={i + 2} />
             ))}
-            <div style={{ padding: '0 40px 40px' }}>
+            <div className="content-pad">
               <SubBanner id="lectured" label="Lectured courses" />
               <SubBanner id="guest"   label="Guest seminars and workshops" />
               {teaching.guest.map((item, i) => (
@@ -306,13 +297,12 @@ export default function WorkClient() {
   )
 }
 
-/* ── Section banner heading ── */
 function SectionBanner({ label, color }) {
   return (
     <div className="section-banner" style={{ backgroundColor: color }}>
       <h2 style={{
         fontFamily:    'var(--font-display)',
-        fontSize:      'clamp(2rem, 4vw, 3rem)',
+        fontSize:      'clamp(1.8rem, 4vw, 3rem)',
         color:         '#f0eeea',
         letterSpacing: '0.04em',
         lineHeight:    1,
@@ -321,7 +311,6 @@ function SectionBanner({ label, color }) {
   )
 }
 
-/* ── Sub-label ── */
 function SubBanner({ id, label }) {
   return (
     <p
