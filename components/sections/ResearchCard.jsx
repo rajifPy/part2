@@ -23,7 +23,7 @@ export default function ResearchCard({ item, onClick, colorIndex = 0 }) {
         }
       </div>
 
-      {/* Teks */}
+      {/* Text body */}
       <div className="research-card__body">
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
           <span style={{
@@ -45,7 +45,7 @@ export default function ResearchCard({ item, onClick, colorIndex = 0 }) {
         <div>
           <h3 style={{
             fontFamily:    'var(--font-display)',
-            fontSize:      'clamp(1.4rem, 2.5vw, 2rem)',
+            fontSize:      'clamp(1.2rem, 2.5vw, 2rem)',
             color:         '#f0eeea',
             lineHeight:    1.05,
             letterSpacing: '0.03em',
