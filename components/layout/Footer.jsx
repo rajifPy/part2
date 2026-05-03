@@ -7,7 +7,7 @@ export default function Footer() {
     <footer style={{
       backgroundColor: '#1a1a1a',
       color:           '#f0eeea',
-      padding:         '28px clamp(20px, 4vw, 40px)',
+      padding:         '28px clamp(16px, 4vw, 40px)',
       display:         'flex',
       justifyContent:  'space-between',
       alignItems:      'center',
@@ -18,7 +18,13 @@ export default function Footer() {
       letterSpacing:   '0.1em',
       textTransform:   'uppercase',
     }}>
-      <div style={{ display: 'flex', gap: '20px', flexWrap: 'wrap', alignItems: 'center' }}>
+      <div style={{
+        display:   'flex',
+        gap:       '16px',
+        flexWrap:  'wrap',
+        alignItems: 'center',
+        minWidth:  0,
+      }}>
         {Object.entries(siteConfig.links).map(([key, url]) => (
           <a
             key={key}
@@ -35,9 +41,19 @@ export default function Footer() {
             {key}
           </a>
         ))}
-        <span style={{ color: 'rgba(240,238,234,0.5)' }}>{siteConfig.email}</span>
+        <span style={{
+          color:     'rgba(240,238,234,0.5)',
+          overflow:  'hidden',
+          textOverflow: 'ellipsis',
+          whiteSpace: 'nowrap',
+          maxWidth:  'calc(100vw - 120px)',
+        }}>
+          {siteConfig.email}
+        </span>
       </div>
-      <span style={{ color: 'rgba(240,238,234,0.4)' }}>© {new Date().getFullYear()}</span>
+      <span style={{ color: 'rgba(240,238,234,0.4)', flexShrink: 0 }}>
+        © {new Date().getFullYear()}
+      </span>
     </footer>
   )
 }
