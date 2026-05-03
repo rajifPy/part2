@@ -7,18 +7,18 @@ export default function Footer() {
     <footer style={{
       backgroundColor: '#1a1a1a',
       color:           '#f0eeea',
-      padding:         '32px 40px',
+      padding:         '28px clamp(20px, 4vw, 40px)',
       display:         'flex',
       justifyContent:  'space-between',
       alignItems:      'center',
       flexWrap:        'wrap',
-      gap:             '16px',
+      gap:             '12px',
       fontFamily:      'var(--font-body)',
       fontSize:        'var(--text-xs)',
       letterSpacing:   '0.1em',
       textTransform:   'uppercase',
     }}>
-      <div style={{ display: 'flex', gap: '28px', flexWrap: 'wrap', alignItems: 'center' }}>
+      <div style={{ display: 'flex', gap: '20px', flexWrap: 'wrap', alignItems: 'center' }}>
         {Object.entries(siteConfig.links).map(([key, url]) => (
           <a
             key={key}
@@ -35,7 +35,7 @@ export default function Footer() {
             {key}
           </a>
         ))}
-        <span style={{ color: 'rgba(240,238,234,0.6)' }}>{siteConfig.email}</span>
+        <span style={{ color: 'rgba(240,238,234,0.5)' }}>{siteConfig.email}</span>
       </div>
       <span style={{ color: 'rgba(240,238,234,0.4)' }}>© {new Date().getFullYear()}</span>
     </footer>
