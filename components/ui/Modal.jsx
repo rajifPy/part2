@@ -18,37 +18,25 @@ export default function Modal({ item, onClose }) {
 
   return (
     <div
+      className="modal-overlay"
       onClick={onClose}
       role="dialog"
       aria-modal="true"
       aria-label={item.title}
-      style={{
-        position:        'fixed',
-        inset:           0,
-        backgroundColor: 'rgba(26,26,26,0.95)',
-        zIndex:          200,
-        overflowY:       'auto',
-        animation:       'modalFadeIn 0.2s ease',
-      }}
     >
       <style>{`
         @keyframes modalFadeIn {
           from { opacity:0; transform:translateY(8px) }
           to   { opacity:1; transform:translateY(0) }
         }
+        .modal-overlay { animation: modalFadeIn 0.2s ease; }
       `}</style>
 
       <div
+        className="modal-inner"
         onClick={e => e.stopPropagation()}
-        style={{
-          maxWidth:        '760px',
-          margin:          '0 auto',
-          padding:         '60px 40px 100px',
-          backgroundColor: '#f0eeea',
-          minHeight:       '100vh',
-        }}
       >
-        {/* Tombol tutup */}
+        {/* Close button */}
         <button
           onClick={onClose}
           style={{
@@ -58,7 +46,7 @@ export default function Modal({ item, onClose }) {
             letterSpacing: '0.15em',
             textTransform: 'uppercase',
             color:         '#999',
-            marginBottom:  '48px',
+            marginBottom:  '40px',
             display:       'flex',
             alignItems:    'center',
             gap:           '8px',
@@ -70,7 +58,7 @@ export default function Modal({ item, onClose }) {
           ← Close
         </button>
 
-        {/* Label kategori */}
+        {/* Category label */}
         <p style={{
           fontFamily:    'var(--font-body)',
           fontWeight:    700,
@@ -78,18 +66,18 @@ export default function Modal({ item, onClose }) {
           letterSpacing: '0.16em',
           textTransform: 'uppercase',
           color:         '#c94f35',
-          marginBottom:  '12px',
+          marginBottom:  '10px',
         }}>{item.subtitle}</p>
 
-        {/* Judul */}
+        {/* Title */}
         <h2 style={{
           fontFamily:    'var(--font-display)',
-          fontSize:      'clamp(2rem, 4vw, 3.2rem)',
+          fontSize:      'clamp(1.8rem, 5vw, 3.2rem)',
           fontWeight:    400,
           lineHeight:    1.0,
           letterSpacing: '0.03em',
           textTransform: 'uppercase',
-          marginBottom:  '32px',
+          marginBottom:  '28px',
           maxWidth:      '640px',
         }}>{item.title}</h2>
 
@@ -111,7 +99,7 @@ export default function Modal({ item, onClose }) {
               backgroundColor: '#1a1a1a',
               color:           '#f0eeea',
               padding:         '10px 20px',
-              marginBottom:    '40px',
+              marginBottom:    '36px',
               transition:      'background-color var(--transition-base)',
             }}
             onMouseEnter={e => e.currentTarget.style.backgroundColor = '#c94f35'}
@@ -123,9 +111,14 @@ export default function Modal({ item, onClose }) {
 
         {/* Meta */}
         {item.meta?.length > 0 && (
-          <div style={{ marginBottom: '32px', display: 'flex', flexWrap: 'wrap', gap: '8px 32px' }}>
+          <div style={{
+            marginBottom: '28px',
+            display:      'flex',
+            flexWrap:     'wrap',
+            gap:          '8px 24px',
+          }}>
             {item.meta.map(m => (
-              <div key={m.label} style={{ display: 'flex', gap: '12px', alignItems: 'baseline' }}>
+              <div key={m.label} style={{ display: 'flex', gap: '10px', alignItems: 'baseline', flexWrap: 'wrap' }}>
                 <span style={{
                   fontFamily:    'var(--font-body)',
                   fontWeight:    700,
@@ -145,7 +138,7 @@ export default function Modal({ item, onClose }) {
         )}
 
         {/* Divider */}
-        <div style={{ height: '2px', backgroundColor: '#1a1a1a', marginBottom: '32px' }} />
+        <div style={{ height: '2px', backgroundColor: '#1a1a1a', marginBottom: '28px' }} />
 
         {/* Body */}
         <div>
@@ -154,15 +147,15 @@ export default function Modal({ item, onClose }) {
               fontFamily:   'var(--font-body)',
               fontSize:     '1rem',
               lineHeight:   1.85,
-              marginBottom: '20px',
+              marginBottom: '18px',
               color:        '#1a1a1a',
             }}>{para}</p>
           ))}
         </div>
 
-        {/* Gambar */}
+        {/* Images */}
         {item.images?.map((img, i) => (
-          <div key={i} style={{ marginTop: '32px' }}>
+          <div key={i} style={{ marginTop: '28px' }}>
             <div style={{
               width:           '100%',
               aspectRatio:     '16/9',
@@ -171,14 +164,10 @@ export default function Modal({ item, onClose }) {
               display:         'flex',
               alignItems:      'center',
               justifyContent:  'center',
-              position:        'relative',
             }}>
               {img.src
-                ? <img
-                    src={img.src}
-                    alt={img.caption}
-                    style={{ width: '100%', height: '100%', objectFit: 'cover' }}
-                  />
+                ? <img src={img.src} alt={img.caption}
+                    style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
                 : <span style={{
                     fontFamily:    'var(--font-body)',
                     fontSize:      'var(--text-xs)',
