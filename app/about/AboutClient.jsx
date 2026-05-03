@@ -39,7 +39,10 @@ export default function AboutClient() {
           <p>{siteConfig.name}</p>
         </div>
 
-        <div style={{ padding: 'clamp(24px, 5vw, 48px) clamp(20px, 5vw, 40px)', maxWidth: '640px' }}>
+        <div style={{
+          padding:  'clamp(24px, 5vw, 48px) clamp(16px, 5vw, 40px)',
+          maxWidth: '680px',
+        }}>
           <p style={{
             fontFamily:   'var(--font-body)',
             fontSize:     '1.05rem',
@@ -71,20 +74,7 @@ export default function AboutClient() {
 
           <a
             href={`mailto:${siteConfig.email.replace('[at]', '@')}`}
-            style={{
-              display:         'inline-flex',
-              alignItems:      'center',
-              gap:             '10px',
-              fontFamily:      'var(--font-body)',
-              fontWeight:      700,
-              fontSize:        'var(--text-sm)',
-              letterSpacing:   '0.12em',
-              textTransform:   'uppercase',
-              backgroundColor: '#1a1a1a',
-              color:           '#f0eeea',
-              padding:         '12px 24px',
-              transition:      'background-color var(--transition-base)',
-            }}
+            className="about-email-btn"
             onMouseEnter={e => e.currentTarget.style.backgroundColor = '#8a7d3a'}
             onMouseLeave={e => e.currentTarget.style.backgroundColor = '#1a1a1a'}
           >
