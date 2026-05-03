@@ -74,7 +74,7 @@ function DocumentRow({ item }) {
         <p style={{
           fontFamily: 'var(--font-body)',
           fontWeight: 500,
-          fontSize:   '0.95rem',
+          fontSize:   '0.92rem',
           lineHeight: 1.5,
         }}>{item.title}</p>
         {item.description && (
@@ -94,6 +94,8 @@ function DocumentRow({ item }) {
           fontSize:      'var(--text-xs)',
           color:         '#6b1f3a',
           letterSpacing: '0.1em',
+          whiteSpace:    'nowrap',
+          alignSelf:     'center',
         }}>
           DOWNLOAD →
         </span>
