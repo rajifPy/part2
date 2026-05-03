@@ -7,10 +7,17 @@ export default function Modal({ item, onClose }) {
     if (!item) return
     const handleKey = (e) => { if (e.key === 'Escape') onClose() }
     document.addEventListener('keydown', handleKey)
-    document.body.style.overflow = 'hidden'
+    // Save current scroll position and lock body
+    const scrollY = window.scrollY
+    document.body.style.position = 'fixed'
+    document.body.style.top = `-${scrollY}px`
+    document.body.style.width = '100%'
     return () => {
       document.removeEventListener('keydown', handleKey)
-      document.body.style.overflow = ''
+      document.body.style.position = ''
+      document.body.style.top = ''
+      document.body.style.width = ''
+      window.scrollTo(0, scrollY)
     }
   }, [item, onClose])
 
@@ -26,10 +33,12 @@ export default function Modal({ item, onClose }) {
     >
       <style>{`
         @keyframes modalFadeIn {
-          from { opacity:0; transform:translateY(8px) }
-          to   { opacity:1; transform:translateY(0) }
+          from { opacity: 0; transform: translateY(8px); }
+          to   { opacity: 1; transform: translateY(0); }
         }
-        .modal-overlay { animation: modalFadeIn 0.2s ease; }
+        .modal-overlay {
+          animation: modalFadeIn 0.2s ease;
+        }
       `}</style>
 
       <div
@@ -46,11 +55,12 @@ export default function Modal({ item, onClose }) {
             letterSpacing: '0.15em',
             textTransform: 'uppercase',
             color:         '#999',
-            marginBottom:  '40px',
+            marginBottom:  '32px',
             display:       'flex',
             alignItems:    'center',
             gap:           '8px',
             transition:    'color var(--transition-base)',
+            padding:       '8px 0',        /* larger tap target on mobile */
           }}
           onMouseEnter={e => e.currentTarget.style.color = '#1a1a1a'}
           onMouseLeave={e => e.currentTarget.style.color = '#999'}
