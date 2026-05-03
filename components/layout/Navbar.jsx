@@ -42,32 +42,45 @@ export default function Navbar() {
         height:          '44px',
         fontFamily:      'var(--font-body)',
       }}>
-        <span style={{
-          fontWeight:    700,
-          fontSize:      'var(--text-sm)',
-          letterSpacing: '0.18em',
-          textTransform: 'uppercase',
-          flex:          1,
-          textAlign:     'center',
-        }}>
+        {/* Spacer kiri agar nama tetap center di desktop */}
+        <div style={{ flex: 1 }} />
+
+        <Link
+          href="/"
+          style={{
+            fontWeight:    700,
+            fontSize:      'var(--text-sm)',
+            letterSpacing: '0.18em',
+            textTransform: 'uppercase',
+            color:         '#f0eeea',
+            flex:          1,
+            textAlign:     'center',
+            whiteSpace:    'nowrap',
+            overflow:      'hidden',
+            textOverflow:  'ellipsis',
+            maxWidth:      'calc(100vw - 96px)',
+          }}
+        >
           {siteConfig.name}
-        </span>
+        </Link>
 
         {/* Hamburger — mobile only */}
-        <button
-          onClick={() => setMenuOpen(o => !o)}
-          aria-label="Toggle menu"
-          style={{
-            display:     'none',
-            flexShrink:  0,
-            color:       '#f0eeea',
-            padding:     '6px',
-            marginLeft:  '8px',
-          }}
-          className="nav-hamburger"
-        >
-          {menuOpen ? '✕' : '☰'}
-        </button>
+        <div style={{ flex: 1, display: 'flex', justifyContent: 'flex-end' }}>
+          <button
+            onClick={() => setMenuOpen(o => !o)}
+            aria-label="Toggle menu"
+            aria-expanded={menuOpen}
+            style={{
+              color:      '#f0eeea',
+              padding:    '6px 0 6px 12px',
+              fontSize:   '1.1rem',
+              lineHeight: 1,
+            }}
+            className="nav-hamburger"
+          >
+            {menuOpen ? '✕' : '☰'}
+          </button>
+        </div>
       </div>
 
       {/* Desktop tab nav */}
@@ -107,12 +120,15 @@ export default function Navbar() {
 
       {/* Mobile dropdown nav */}
       {menuOpen && (
-        <nav className="nav-mobile" style={{
-          backgroundColor: '#1a1a1a',
-          display:         'flex',
-          flexDirection:   'column',
-          borderTop:       '1px solid rgba(240,238,234,0.1)',
-        }}>
+        <nav
+          className="nav-mobile"
+          style={{
+            backgroundColor: '#1a1a1a',
+            display:         'flex',
+            flexDirection:   'column',
+            borderTop:       '1px solid rgba(240,238,234,0.1)',
+          }}
+        >
           {siteConfig.nav.map(({ label, href }) => {
             const isActive = pathname === href || pathname.startsWith(href + '/')
             const bg       = TAB_COLORS[href] ?? '#ccc'
@@ -122,7 +138,7 @@ export default function Navbar() {
                 href={href}
                 onClick={() => setMenuOpen(false)}
                 style={{
-                  padding:         '14px 24px',
+                  padding:         '16px 24px',
                   backgroundColor: isActive ? bg : 'transparent',
                   color:           isActive ? (TAB_TEXT_COLORS[href] ?? '#f0eeea') : 'rgba(240,238,234,0.65)',
                   fontFamily:      'var(--font-body)',
@@ -131,6 +147,7 @@ export default function Navbar() {
                   letterSpacing:   '0.12em',
                   textTransform:   'uppercase',
                   borderLeft:      isActive ? `4px solid rgba(255,255,255,0.3)` : '4px solid transparent',
+                  display:         'block',
                 }}
               >
                 {label}
@@ -141,9 +158,11 @@ export default function Navbar() {
       )}
 
       <style>{`
+        .nav-hamburger { display: none !important; }
+
         @media (max-width: 600px) {
           .nav-hamburger { display: flex !important; }
-          .nav-tabs { display: none !important; }
+          .nav-tabs      { display: none !important; }
         }
         @media (min-width: 601px) {
           .nav-mobile { display: none !important; }
