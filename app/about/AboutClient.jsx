@@ -12,7 +12,7 @@ export default function AboutClient() {
         style={{ backgroundColor: '#8a7d3a' }}
       >
         <div>
-          <h1 className="sidebar-heading" style={{ marginBottom: '28px' }}>ABOUT</h1>
+          <h1 className="sidebar-heading" style={{ marginBottom: '24px' }}>ABOUT</h1>
           <p style={{
             fontFamily:    'var(--font-body)',
             fontWeight:    500,
@@ -39,7 +39,7 @@ export default function AboutClient() {
           <p>{siteConfig.name}</p>
         </div>
 
-        <div style={{ padding: '48px 40px', maxWidth: '640px' }}>
+        <div style={{ padding: 'clamp(24px, 5vw, 48px) clamp(20px, 5vw, 40px)', maxWidth: '640px' }}>
           <p style={{
             fontFamily:   'var(--font-body)',
             fontSize:     '1.05rem',
@@ -64,7 +64,7 @@ export default function AboutClient() {
             fontSize:     '1.05rem',
             lineHeight:   1.85,
             color:        '#1a1a1a',
-            marginBottom: '40px',
+            marginBottom: '36px',
           }}>
             Paragraf ketiga: riwayat pendidikan dan afiliasi terdahulu.
           </p>
