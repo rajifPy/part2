@@ -6,7 +6,6 @@ export default function NewsClient() {
   return (
     <div className="page-layout">
 
-      {/* Sidebar kiri — pink */}
       <aside
         className="page-sidebar page-sidebar--sticky"
         style={{ backgroundColor: '#e8a8c0' }}
@@ -14,7 +13,6 @@ export default function NewsClient() {
         <h1 className="sidebar-heading sidebar-heading--dark">NEWS</h1>
       </aside>
 
-      {/* Konten kanan */}
       <main className="page-main">
         <div className="name-bar">
           <p>Latest updates</p>
@@ -62,7 +60,7 @@ function NewsRow({ item }) {
         <p style={{
           fontFamily: 'var(--font-body)',
           fontWeight: 500,
-          fontSize:   '0.95rem',
+          fontSize:   '0.92rem',
           lineHeight: 1.5,
         }}>{item.title}</p>
         {item.location && (
