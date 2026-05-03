@@ -1,0 +1,97 @@
+'use client'
+
+import { siteConfig } from '@/data/config'
+
+export default function AboutClient() {
+  return (
+    <div className="page-layout">
+
+      {/* Sidebar kiri — olive */}
+      <aside
+        className="page-sidebar"
+        style={{ backgroundColor: '#8a7d3a' }}
+      >
+        <div>
+          <h1 className="sidebar-heading" style={{ marginBottom: '28px' }}>ABOUT</h1>
+          <p style={{
+            fontFamily:    'var(--font-body)',
+            fontWeight:    500,
+            fontSize:      'var(--text-sm)',
+            letterSpacing: '0.12em',
+            textTransform: 'uppercase',
+            color:         'rgba(240,238,234,0.7)',
+          }}>{siteConfig.role}</p>
+        </div>
+
+        <div className="social-links">
+          {Object.entries(siteConfig.links).map(([key, url]) => (
+            <a key={key} href={url} target="_blank" rel="noopener noreferrer">
+              {key}
+            </a>
+          ))}
+          <span className="email">{siteConfig.email}</span>
+        </div>
+      </aside>
+
+      {/* Konten kanan */}
+      <main className="page-main">
+        <div className="name-bar">
+          <p>{siteConfig.name}</p>
+        </div>
+
+        <div style={{ padding: '48px 40px', maxWidth: '640px' }}>
+          <p style={{
+            fontFamily:   'var(--font-body)',
+            fontSize:     '1.05rem',
+            lineHeight:   1.85,
+            color:        '#1a1a1a',
+            marginBottom: '24px',
+          }}>
+            Tuliskan biografi singkat Anda di sini. Sebutkan posisi, institusi,
+            dan latar belakang akademik Anda.
+          </p>
+          <p style={{
+            fontFamily:   'var(--font-body)',
+            fontSize:     '1.05rem',
+            lineHeight:   1.85,
+            color:        '#1a1a1a',
+            marginBottom: '24px',
+          }}>
+            Paragraf kedua: fokus penelitian, metodologi, dan minat akademik utama.
+          </p>
+          <p style={{
+            fontFamily:   'var(--font-body)',
+            fontSize:     '1.05rem',
+            lineHeight:   1.85,
+            color:        '#1a1a1a',
+            marginBottom: '40px',
+          }}>
+            Paragraf ketiga: riwayat pendidikan dan afiliasi terdahulu.
+          </p>
+
+          <a
+            href={`mailto:${siteConfig.email.replace('[at]', '@')}`}
+            style={{
+              display:         'inline-flex',
+              alignItems:      'center',
+              gap:             '10px',
+              fontFamily:      'var(--font-body)',
+              fontWeight:      700,
+              fontSize:        'var(--text-sm)',
+              letterSpacing:   '0.12em',
+              textTransform:   'uppercase',
+              backgroundColor: '#1a1a1a',
+              color:           '#f0eeea',
+              padding:         '12px 24px',
+              transition:      'background-color var(--transition-base)',
+            }}
+            onMouseEnter={e => e.currentTarget.style.backgroundColor = '#8a7d3a'}
+            onMouseLeave={e => e.currentTarget.style.backgroundColor = '#1a1a1a'}
+          >
+            {siteConfig.email} →
+          </a>
+        </div>
+      </main>
+    </div>
+  )
+}
