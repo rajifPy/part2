@@ -1,7 +1,7 @@
 export const siteConfig = {
-  name:        'Nama Anda',
+  name:        'Dendi Yusuf',
   title:       'Nama Anda — Peneliti',
-  description: 'Portfolio akademik dan penelitian.',
+  description: 'Portfolio Guru Honorer dan Sosialis',
   role:        'Peneliti / Sejarawan Arsitektur',
 
   email: 'nama.anda[at]institusi.ac.id',
