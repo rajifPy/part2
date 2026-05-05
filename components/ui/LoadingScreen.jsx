@@ -3,7 +3,7 @@
 import { useState, useEffect, useRef } from 'react'
 import { usePathname } from 'next/navigation'
 
-export default function LoadingScreen({ name = 'NAMA ANDA' }) {
+export default function LoadingScreen({ name = 'Dendi Yusuf' }) {
   const pathname           = usePathname()
   const prevPathname       = useRef(null)
   const [show, setShow]    = useState(false)
