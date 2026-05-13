@@ -43,7 +43,7 @@ export default function HomePage() {
         style={{ display: 'flex', flexDirection: 'column' }}
       >
         <div className="name-bar">
-          <p>Research Portfolio</p>
+          <p>Selamat Datang</p>
         </div>
 
         <div style={{
@@ -66,27 +66,57 @@ export default function HomePage() {
             dan sejarah lisan.
           </p>
 
-          <a
-            href="/work"
-            style={{
-              display:         'inline-flex',
-              alignItems:      'center',
-              gap:             '10px',
-              fontFamily:      'var(--font-body)',
-              fontWeight:      700,
-              fontSize:        'var(--text-sm)',
-              letterSpacing:   '0.15em',
-              textTransform:   'uppercase',
-              backgroundColor: '#1a1a1a',
-              color:           '#f0eeea',
-              padding:         '12px 24px',
-              transition:      'background-color var(--transition-base)',
-            }}
-            onMouseEnter={e => e.currentTarget.style.backgroundColor = '#c94f35'}
-            onMouseLeave={e => e.currentTarget.style.backgroundColor = '#1a1a1a'}
-          >
-            Lihat karya →
-          </a>
+          <div style={{ display: 'flex', gap: '12px', flexWrap: 'wrap' }}>
+            <a
+              href="/tentang-saya"
+              style={{
+                display:         'inline-flex',
+                alignItems:      'center',
+                gap:             '10px',
+                fontFamily:      'var(--font-body)',
+                fontWeight:      700,
+                fontSize:        'var(--text-sm)',
+                letterSpacing:   '0.15em',
+                textTransform:   'uppercase',
+                backgroundColor: '#1a1a1a',
+                color:           '#f0eeea',
+                padding:         '12px 24px',
+                transition:      'background-color var(--transition-base)',
+              }}
+              onMouseEnter={e => e.currentTarget.style.backgroundColor = '#c94f35'}
+              onMouseLeave={e => e.currentTarget.style.backgroundColor = '#1a1a1a'}
+            >
+              Tentang Saya →
+            </a>
+            <a
+              href="/pengalaman"
+              style={{
+                display:         'inline-flex',
+                alignItems:      'center',
+                gap:             '10px',
+                fontFamily:      'var(--font-body)',
+                fontWeight:      700,
+                fontSize:        'var(--text-sm)',
+                letterSpacing:   '0.15em',
+                textTransform:   'uppercase',
+                backgroundColor: 'transparent',
+                color:           '#1a1a1a',
+                padding:         '12px 24px',
+                border:          '2px solid #1a1a1a',
+                transition:      'all var(--transition-base)',
+              }}
+              onMouseEnter={e => {
+                e.currentTarget.style.backgroundColor = '#1a1a1a'
+                e.currentTarget.style.color = '#f0eeea'
+              }}
+              onMouseLeave={e => {
+                e.currentTarget.style.backgroundColor = 'transparent'
+                e.currentTarget.style.color = '#1a1a1a'
+              }}
+            >
+              Pengalaman →
+            </a>
+          </div>
         </div>
       </main>
     </div>
