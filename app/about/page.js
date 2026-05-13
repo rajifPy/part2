@@ -1,11 +1,11 @@
-import { siteConfig } from '@/data/config'
-import AboutClient    from './AboutClient'
+import { siteConfig }        from '@/data/config'
+import TentangSayaClient     from './TentangSayaClient'
 
 export const metadata = {
-  title:       `About — ${siteConfig.name}`,
-  description: `Tentang ${siteConfig.name}, ${siteConfig.role}.`,
+  title:       `Tentang Saya — ${siteConfig.name}`,
+  description: `Profil dan biografi ${siteConfig.name}, ${siteConfig.role}.`,
 }
 
-export default function AboutPage() {
-  return <AboutClient />
+export default function TentangSayaPage() {
+  return <TentangSayaClient />
 }
