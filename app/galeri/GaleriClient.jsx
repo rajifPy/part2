@@ -1,5 +1,7 @@
 'use client'
 
+import { useState } from 'react'
+
 /**
  * data/galeri.js — bisa dipindah ke file terpisah
  * Tambahkan item foto/media di sini.
@@ -10,7 +12,7 @@ const galeriItems = [
     year:     '2025',
     category: 'Konferensi',
     caption:  'Presentasi di Nama Konferensi, Kota',
-    src:      null,   // ganti dengan path gambar, misal: '/images/foto-1.jpg'
+    src:      null,
   },
   {
     id:       'foto-2',
@@ -58,22 +60,6 @@ const CATEGORY_COLORS = {
 }
 
 export default function GaleriClient() {
-  const [filter, setFilter] = window.__React?.useState
-    ? window.__React.useState('Semua')
-    : [null, () => {}]
-
-  // SSR-safe: use require-style import workaround
-  const React = require ? (() => {
-    try { return require('react') } catch { return null }
-  })() : null
-
-  return <GaleriInner />
-}
-
-// Real component with hooks
-import { useState } from 'react'
-
-export function GaleriInner() {
   const [filter, setFilter] = useState('Semua')
   const [lightbox, setLightbox] = useState(null)
 
@@ -245,11 +231,6 @@ export function GaleriInner() {
       </div>
     </>
   )
-}
-
-// Alias default export ke GaleriInner agar Next.js happy
-export default function GaleriClient() {
-  return <GaleriInner />
 }
 
 function GalleryCard({ item, onClick }) {
