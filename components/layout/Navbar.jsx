@@ -6,17 +6,17 @@ import { useState }    from 'react'
 import { siteConfig }  from '@/data/config'
 
 const TAB_COLORS = {
-  '/about':     '#8a7d3a',
-  '/news':      '#e8a8c0',
-  '/work':      '#d4604a',
-  '/documents': '#6b1f3a',
+  '/':             '#8a7d3a',
+  '/tentang-saya': '#e8a8c0',
+  '/pengalaman':   '#d4604a',
+  '/galeri':       '#6b1f3a',
 }
 
 const TAB_TEXT_COLORS = {
-  '/about':     '#f0eeea',
-  '/news':      '#1a1a1a',
-  '/work':      '#f0eeea',
-  '/documents': '#f0eeea',
+  '/':             '#f0eeea',
+  '/tentang-saya': '#1a1a1a',
+  '/pengalaman':   '#f0eeea',
+  '/galeri':       '#f0eeea',
 }
 
 function adjustAlpha(hexOrRgb, alpha) {
@@ -42,7 +42,6 @@ export default function Navbar() {
         height:          '44px',
         fontFamily:      'var(--font-body)',
       }}>
-        {/* Spacer kiri agar nama tetap center di desktop */}
         <div style={{ flex: 1 }} />
 
         <Link
@@ -64,7 +63,6 @@ export default function Navbar() {
           {siteConfig.name}
         </Link>
 
-        {/* Hamburger — mobile only */}
         <div style={{ flex: 1, display: 'flex', justifyContent: 'flex-end' }}>
           <button
             onClick={() => setMenuOpen(o => !o)}
@@ -86,7 +84,9 @@ export default function Navbar() {
       {/* Desktop tab nav */}
       <nav className="nav-tabs" style={{ display: 'flex' }}>
         {siteConfig.nav.map(({ label, href }) => {
-          const isActive  = pathname === href || pathname.startsWith(href + '/')
+          const isActive  = href === '/'
+            ? pathname === '/'
+            : pathname === href || pathname.startsWith(href + '/')
           const bg        = TAB_COLORS[href]      ?? '#ccc'
           const textColor = TAB_TEXT_COLORS[href] ?? '#1a1a1a'
 
@@ -130,8 +130,10 @@ export default function Navbar() {
           }}
         >
           {siteConfig.nav.map(({ label, href }) => {
-            const isActive = pathname === href || pathname.startsWith(href + '/')
-            const bg       = TAB_COLORS[href] ?? '#ccc'
+            const isActive = href === '/'
+              ? pathname === '/'
+              : pathname === href || pathname.startsWith(href + '/')
+            const bg = TAB_COLORS[href] ?? '#ccc'
             return (
               <Link
                 key={href}
