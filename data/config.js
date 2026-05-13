@@ -1,8 +1,8 @@
 export const siteConfig = {
-  name:        'Dendi Yusuf',
-  title:       'Nama Anda — Peneliti',
-  description: 'Portfolio Guru Honorer dan Sosialis',
-  role:        'Seorang Guru',
+  name:        'Nafis',
+  title:       'Mahasiswa Pendidikan Agama Islam',
+  description: 'Mahasiswa Kupu-Kupu',
+  role:        'Guru',
 
   email: 'nama.anda[at]institusi.ac.id',
 
@@ -12,9 +12,9 @@ export const siteConfig = {
   },
 
   nav: [
-    { label: 'about',     href: '/about'     },
-    { label: 'news',      href: '/news'      },
-    { label: 'work',      href: '/work'      },
-    { label: 'documents', href: '/documents' },
+    { label: 'Home',          href: '/'              },
+    { label: 'Tentang_Saya',  href: '/tentang-saya'  },
+    { label: 'Pengalaman',    href: '/pengalaman'    },
+    { label: 'Galeri',        href: '/galeri'        },
   ],
 }
