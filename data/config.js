@@ -18,3 +18,9 @@ export const siteConfig = {
     { label: 'Galeri',        href: '/galeri'        },
   ],
 }
+
+export const siteConfig = {
+  name:      'Nafis',
+  avatarUrl: '/image/nafis.jpeg',   // ← pastikan ini ada
+  // ...
+}
