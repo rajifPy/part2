@@ -2,8 +2,8 @@ export const siteConfig = {
   name:        'Zumrotun Nafisah',
   avatarUrl:   '/image/nafis.jpeg',
   title:       'Pendidikan Agama Islam',
-  description: 'Mahasiswa Kupu-Kupu',
-  role:        'Mahasiswa',
+  description: 'Mahasiswi Kupu-Kupu',
+  role:        'Mahasiswi',
 
   email: 'nama.anda[at]institusi.ac.id',
 
