@@ -126,7 +126,7 @@ export default function Footer() {
         }
       `}</style>
 
-      {/* Icon row */}
+      {{/* Icon row */}
       <div className="footer-icons-row">
         {SOCIAL_LINKS.map((s, i) => (
           <span key={s.key} style={{ display: 'flex', alignItems: 'center' }}>
@@ -146,7 +146,6 @@ export default function Footer() {
           </span>
         ))}
       </div>
-
       {/* Copyright */}
       <p className="footer-copy">
         © {new Date().getFullYear()} {siteConfig.name} — nafisPPHA@2026
