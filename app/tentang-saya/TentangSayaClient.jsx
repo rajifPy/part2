@@ -7,9 +7,9 @@ import { siteConfig } from '@/data/config'
    FOTO SLIDESHOW — tambahkan path foto kamu
 ══════════════════════════════════════════ */
 const SLIDE_PHOTOS = [
-  { src: '/image/nafis.jpeg',  caption: 'Profile1' },
-  { src: '/image/profile2.jpg', caption: 'Foto' },
-  { src: '/image/profile3.jpg', caption: 'Foto' },
+  { src: '/image/nafis.jpeg',  caption: 'Foto 1' },
+  { src: '/image/profile2.jpg', caption: 'Foto 2' },
+  { src: '/image/profile3.jpg', caption: 'Foto 3' },
 ]
 
 /* ══════════════════════════════════════════
@@ -483,28 +483,7 @@ export default function TentangSayaClient() {
             MAIN CONTENT
         ══════════════════════════════ */}
         <main className="ts-main">
-          <div className="name-bar"><p>{siteConfig.name}</p></div>
-
           <div className="ts-content">
-
-            {/* Nama + title */}
-            <div style={{ marginBottom: '28px' }}>
-              <h2
-                className="ts-name-text"
-                style={{
-                  fontFamily: 'var(--font-display)', fontSize: 'clamp(2.2rem, 5vw, 3.8rem)',
-                  lineHeight: 0.9, letterSpacing: '0.02em', textTransform: 'uppercase',
-                  color: '#1a1a1a', marginBottom: '10px',
-                }}
-              >
-                {siteConfig.name}
-              </h2>
-              <p style={{
-                fontFamily: 'var(--font-body)', fontWeight: 700,
-                fontSize: 'var(--text-sm)', letterSpacing: '0.16em', textTransform: 'uppercase',
-                color: '#c94f35',
-              }}>{siteConfig.title}</p>
-            </div>
 
             {/* Stats */}
             <div style={{ display: 'flex', gap: '8px', marginBottom: '32px', flexWrap: 'wrap' }}>
