@@ -7,9 +7,9 @@ import { siteConfig } from '@/data/config'
    FOTO SLIDESHOW — tambahkan path foto kamu
 ══════════════════════════════════════════ */
 const SLIDE_PHOTOS = [
-  { src: '/image/nafis.jpeg',  caption: 'Foto 1' },
-  { src: '/image/profile2.jpg', caption: 'Foto 2' },
-  { src: '/image/profile3.jpg', caption: 'Foto 3' },
+  { src: '/image/nafis.jpeg',  caption: 'Profile1' },
+  { src: '/image/profile2.jpg', caption: 'Foto' },
+  { src: '/image/profile3.jpg', caption: 'Foto' },
 ]
 
 /* ══════════════════════════════════════════
