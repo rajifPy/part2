@@ -60,7 +60,7 @@ export default function Footer() {
       </div>
 
       <p className="footer-copy">
-        © {new Date().getFullYear()} {siteConfig.name} — nafisPPHA@2026
+        © {new Date().getFullYear()} {siteConfig.name} — editor @murfhi
       </p>
     </footer>
   )
