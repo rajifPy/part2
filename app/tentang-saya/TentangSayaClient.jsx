@@ -10,16 +10,15 @@ const SLIDE_PHOTOS = [
   { src: '/image/nafis.jpeg',  caption: 'Foto 1' },
   { src: '/image/nafis2.jpeg', caption: 'Foto 2' },
   { src: '/image/nafis3.jpeg', caption: 'Foto 3' },
-  // Tambah foto lagi di sini jika ada
 ]
 
 /* ══════════════════════════════════════════
-   DATA — sesuaikan dengan profil Nafis
+   DATA
 ══════════════════════════════════════════ */
 const STATS = [
   { value: '2023', label: 'Mulai Kuliah' },
-  { value: '2+', label: 'Tahun Belajar' },
-  { value: 'PAI', label: 'Program Studi' },
+  { value: '2+',   label: 'Tahun Belajar' },
+  { value: 'PAI',  label: 'Program Studi' },
 ]
 
 const SKILLS = [
@@ -105,8 +104,6 @@ function StatCard({ value, label, index, mounted }) {
 export default function TentangSayaClient() {
   const [mounted, setMounted] = useState(false)
   const [skillRef, skillStarted] = useSkillReveal()
-
-  // Slideshow state
   const [slideIdx, setSlideIdx] = useState(0)
   const timerRef = useRef(null)
 
@@ -138,13 +135,40 @@ export default function TentangSayaClient() {
           to   { opacity: 1; }
         }
 
-        .ts-name-text  { animation: fadeSlideUp 0.6s ease 0.3s both; }
-        .ts-role-row   { animation: fadeSlideUp 0.5s ease 0.4s both; }
-        .ts-bio-block  { animation: fadeSlideUp 0.6s ease 0.45s both; }
-        .ts-interests  { animation: fadeIn 0.6s ease 0.6s both; }
-        .ts-email-btn  { animation: fadeIn 0.5s ease 0.7s both; }
+        .ts-name-text { animation: fadeSlideUp 0.6s ease 0.3s both; }
+        .ts-bio-block { animation: fadeSlideUp 0.6s ease 0.45s both; }
+        .ts-interests { animation: fadeIn 0.6s ease 0.6s both; }
+        .ts-email-btn { animation: fadeIn 0.5s ease 0.7s both; }
 
-        /* ── Slideshow sidebar ── */
+        /* ─── Layout utama ─── */
+        .ts-layout {
+          display: flex;
+          flex-direction: row;
+          min-height: calc(100vh - var(--nav-height));
+        }
+
+        /* ─── Sidebar slideshow ───
+           Pakai !important untuk override globals.css
+           yang mengubah sidebar jadi flex-row di mobile
+        ─── */
+        .ts-sidebar {
+          width: var(--sidebar-width) !important;
+          flex-shrink: 0 !important;
+          padding: 0 !important;
+          position: sticky !important;
+          top: var(--nav-height) !important;
+          align-self: start !important;
+          min-height: calc(100vh - var(--nav-height)) !important;
+          height: calc(100vh - var(--nav-height)) !important;
+          overflow: hidden !important;
+          background-color: #1a1a1a !important;
+          flex-direction: column !important;
+          justify-content: flex-start !important;
+          align-items: stretch !important;
+          flex-wrap: nowrap !important;
+          gap: 0 !important;
+        }
+
         .ts-sidebar-slide {
           position: absolute;
           inset: 0;
@@ -160,9 +184,9 @@ export default function TentangSayaClient() {
           inset: 0;
           background: linear-gradient(
             160deg,
-            rgba(15,10,30,0.52) 0%,
-            rgba(15,10,30,0.28) 38%,
-            rgba(10,6,22,0.82) 100%
+            rgba(15,10,30,0.50) 0%,
+            rgba(15,10,30,0.22) 35%,
+            rgba(10,6,22,0.88) 100%
           );
           z-index: 5;
         }
@@ -170,12 +194,13 @@ export default function TentangSayaClient() {
         .ts-sidebar-content {
           position: relative;
           z-index: 10;
+          width: 100%;
           height: 100%;
-          min-height: calc(100vh - var(--nav-height));
           padding: 32px 28px;
           display: flex;
           flex-direction: column;
           justify-content: space-between;
+          box-sizing: border-box;
         }
 
         .ts-dot-btn {
@@ -206,7 +231,18 @@ export default function TentangSayaClient() {
           color: #fff;
         }
 
-        /* ── Main content tags ── */
+        /* ─── Main content ─── */
+        .ts-main {
+          flex: 1;
+          min-width: 0;
+          background-color: #f0eeea;
+        }
+
+        .ts-content {
+          padding: clamp(24px,5vw,48px) clamp(20px,5vw,44px) 56px;
+          max-width: 720px;
+        }
+
         .ts-tag {
           display: inline-block;
           font-family: var(--font-body); font-weight: 700;
@@ -234,47 +270,92 @@ export default function TentangSayaClient() {
           background: linear-gradient(to right, #c94f35, #8a7d3a 50%, #6b1f3a);
           margin: 28px 0;
         }
+
         .ts-section-label {
           font-family: var(--font-body); font-weight: 700;
           font-size: 0.58rem; letter-spacing: 0.2em; text-transform: uppercase;
           color: #aaa; margin-bottom: 16px;
         }
 
-        /* ── RESPONSIVE ── */
+        /* quote: hanya muncul di mobile, dalam main content */
+        .ts-quote-mobile { display: none; }
+
+        /* ══════════════════════════════════════
+           MOBILE ≤ 768px
+           Sidebar berubah jadi banner foto di atas,
+           quote panjang dipindah ke dalam main content
+        ══════════════════════════════════════ */
         @media (max-width: 768px) {
-          .ts-layout  { flex-direction: column !important; }
+          .ts-layout {
+            flex-direction: column !important;
+          }
+
+          /* sidebar jadi banner horizontal penuh */
           .ts-sidebar {
             width: 100% !important;
-            min-height: 280px !important;
-            position: static !important;
+            position: relative !important;
+            top: 0 !important;
+            align-self: auto !important;
+            min-height: 0 !important;
+            height: 300px !important;
           }
+
           .ts-sidebar-content {
-            min-height: 280px !important;
-            padding: 20px !important;
+            height: 300px !important;
+            padding: 18px 20px !important;
           }
-          .ts-content { padding: 20px 20px 40px !important; }
-          .ts-stats > div { flex: 1 1 80px !important; }
+
+          /* sembunyikan quote & caption di dalam sidebar (kurang tempat) */
+          .ts-quote-block  { display: none !important; }
+          .ts-caption-txt  { display: none !important; }
+          .ts-divider-thin { display: none !important; }
+
+          /* nama lebih besar di mobile karena lebar penuh */
+          .ts-slide-name {
+            font-size: clamp(2.6rem, 9vw, 3.8rem) !important;
+            margin-bottom: 8px !important;
+          }
+
+          /* tampilkan quote di main content */
+          .ts-quote-mobile { display: block !important; }
+
+          .ts-content {
+            padding: 20px 20px 40px !important;
+          }
+
+          .ts-email-cta {
+            width: 100%;
+            justify-content: center;
+          }
         }
 
+        /* ══════════════════════════════════════
+           SMALL MOBILE ≤ 480px
+        ══════════════════════════════════════ */
         @media (max-width: 480px) {
-          .ts-content { padding: 16px 16px 32px !important; }
+          .ts-sidebar {
+            height: 240px !important;
+          }
+          .ts-sidebar-content {
+            height: 240px !important;
+            padding: 14px 16px !important;
+          }
+          .ts-slide-name {
+            font-size: clamp(2.2rem, 8vw, 3rem) !important;
+          }
+          .ts-content {
+            padding: 16px 16px 32px !important;
+          }
         }
       `}</style>
 
-      <div className="ts-layout" style={{ display: 'flex', minHeight: 'calc(100vh - var(--nav-height))' }}>
+      <div className="ts-layout">
 
-        {/* ══════════════════════════════
+        {/* ══════════════════════════════════════
             SIDEBAR — FOTO SLIDESHOW
-        ══════════════════════════════ */}
-        <aside
-          className="ts-sidebar page-sidebar page-sidebar--sticky"
-          style={{
-            overflow: 'hidden',
-            position: 'relative',
-            padding: 0,
-            backgroundColor: '#1a1a1a', /* fallback saat foto belum load */
-          }}
-        >
+        ══════════════════════════════════════ */}
+        <aside className="ts-sidebar">
+
           {/* Accent bar kiri */}
           <div style={{
             position: 'absolute', left: 0, top: 0,
@@ -298,9 +379,8 @@ export default function TentangSayaClient() {
           {/* Konten di atas foto */}
           <div className="ts-sidebar-content">
 
-            {/* Top: dots + panah navigasi */}
+            {/* Baris atas: dots + tombol panah */}
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-              {/* Dots */}
               <div style={{ display: 'flex', gap: '6px', alignItems: 'center' }}>
                 {SLIDE_PHOTOS.map((_, i) => (
                   <button
@@ -317,8 +397,6 @@ export default function TentangSayaClient() {
                   />
                 ))}
               </div>
-
-              {/* Panah */}
               <div style={{ display: 'flex', gap: '6px' }}>
                 <button
                   className="ts-nav-arrow"
@@ -333,11 +411,11 @@ export default function TentangSayaClient() {
               </div>
             </div>
 
-            {/* Bottom: nama + quote */}
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
+            {/* Baris bawah: nama + quote */}
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
 
-              {/* Caption foto */}
-              <span style={{
+              {/* Caption (disembunyikan di mobile) */}
+              <span className="ts-caption-txt" style={{
                 fontSize: '9px', fontWeight: 700, letterSpacing: '0.12em',
                 textTransform: 'uppercase', color: 'rgba(255,255,255,0.4)',
                 textAlign: 'right',
@@ -347,12 +425,15 @@ export default function TentangSayaClient() {
 
               {/* Nama & role */}
               <div>
-                <p style={{
-                  fontFamily: 'var(--font-display)',
-                  fontSize: 'clamp(1.8rem, 3vw, 2.4rem)',
-                  letterSpacing: '0.03em', textTransform: 'uppercase',
-                  color: '#fff', lineHeight: 0.92, marginBottom: '10px',
-                }}>
+                <p
+                  className="ts-slide-name"
+                  style={{
+                    fontFamily: 'var(--font-display)',
+                    fontSize: 'clamp(1.8rem, 2.8vw, 2.4rem)',
+                    letterSpacing: '0.03em', textTransform: 'uppercase',
+                    color: '#fff', lineHeight: 0.92, marginBottom: '10px',
+                  }}
+                >
                   {siteConfig.name.split(' ').map((w, i) => (
                     <span key={i} style={{ display: 'block' }}>{w}</span>
                   ))}
@@ -366,17 +447,16 @@ export default function TentangSayaClient() {
                 </div>
               </div>
 
-              {/* Garis pembatas */}
-              <div style={{ height: '1px', background: 'rgba(255,255,255,0.15)' }} />
+              {/* Garis tipis (disembunyikan di mobile) */}
+              <div className="ts-divider-thin" style={{ height: '1px', background: 'rgba(255,255,255,0.15)' }} />
 
-              {/* Motto / Quote */}
-              <div>
+              {/* Quote (disembunyikan di mobile, dipindah ke bawah main) */}
+              <div className="ts-quote-block">
                 <div style={{
-                  fontFamily: 'var(--font-display)', fontSize: '2.5rem',
+                  fontFamily: 'var(--font-display)', fontSize: '2.2rem',
                   lineHeight: 0.6, color: 'rgba(255,255,255,0.15)',
                   marginBottom: '8px', userSelect: 'none',
                 }}>"</div>
-
                 <p style={{
                   fontFamily: 'var(--font-body)', fontWeight: 400,
                   fontSize: '11px', lineHeight: 1.75,
@@ -386,7 +466,6 @@ export default function TentangSayaClient() {
                   Grow at your own pace, stay grounded in faith, and let your impact do the talking.
                   Authenticity is the new standard.
                 </p>
-
                 <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
                   <div style={{ width: '14px', height: '1.5px', background: '#c94f35' }} />
                   <span style={{
@@ -395,20 +474,18 @@ export default function TentangSayaClient() {
                   }}>Moto Hidup</span>
                 </div>
               </div>
+
             </div>
           </div>
         </aside>
 
-        {/* ══════════════════
+        {/* ══════════════════════════════
             MAIN CONTENT
-        ══════════════════ */}
-        <main className="page-main">
+        ══════════════════════════════ */}
+        <main className="ts-main">
           <div className="name-bar"><p>{siteConfig.name}</p></div>
 
-          <div
-            className="ts-content"
-            style={{ padding: 'clamp(24px,5vw,48px) clamp(20px,5vw,44px) 56px', maxWidth: '720px' }}
-          >
+          <div className="ts-content">
 
             {/* Nama + title */}
             <div style={{ marginBottom: '28px' }}>
@@ -430,7 +507,7 @@ export default function TentangSayaClient() {
             </div>
 
             {/* Stats */}
-            <div className="ts-stats" style={{ display: 'flex', gap: '8px', marginBottom: '32px', flexWrap: 'wrap' }}>
+            <div style={{ display: 'flex', gap: '8px', marginBottom: '32px', flexWrap: 'wrap' }}>
               {STATS.map((s, i) => <StatCard key={s.label} {...s} index={i} mounted={mounted} />)}
             </div>
 
@@ -469,6 +546,26 @@ export default function TentangSayaClient() {
             </div>
 
             <div className="ts-divider" />
+
+            {/* Quote mobile — tampil di sini hanya pada layar kecil */}
+            <div className="ts-quote-mobile" style={{
+              borderLeft: '4px solid #c94f35',
+              paddingLeft: '16px',
+              marginBottom: '28px',
+            }}>
+              <p style={{
+                fontFamily: 'var(--font-body)', fontSize: '0.9rem',
+                lineHeight: 1.8, color: '#555', fontStyle: 'italic',
+                marginBottom: '8px',
+              }}>
+                Grow at your own pace, stay grounded in faith, and let your impact do the talking.
+                Authenticity is the new standard.
+              </p>
+              <span style={{
+                fontFamily: 'var(--font-body)', fontWeight: 700, fontSize: '0.6rem',
+                letterSpacing: '0.16em', textTransform: 'uppercase', color: '#c94f35',
+              }}>Moto Hidup</span>
+            </div>
 
             {/* Email CTA */}
             <div className="ts-email-btn">
