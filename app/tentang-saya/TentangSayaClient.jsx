@@ -278,29 +278,45 @@ export default function TentangSayaClient() {
             </div>
           </div>
 
-          {/* ── Social links ── */}
-          <div
-            className="ts-sidebar-social"
-            style={{ display: 'flex', flexDirection: 'column', gap: '4px', position: 'relative', zIndex: 1 }}
-          >
-            {Object.entries(siteConfig.links).map(([key, url]) => (
-              <a
-                key={key} href={url} target="_blank" rel="noopener noreferrer"
-                style={{
-                  fontFamily: 'var(--font-body)', fontSize: 'var(--text-xs)',
-                  letterSpacing: '0.14em', textTransform: 'uppercase',
-                  color: 'rgba(26,26,26,0.5)', transition: 'color 0.15s',
-                }}
-                onMouseEnter={e => e.currentTarget.style.color = '#1a1a1a'}
-                onMouseLeave={e => e.currentTarget.style.color = 'rgba(26,26,26,0.5)'}
-              >
-                {key}
-              </a>
-            ))}
-            <span style={{
-              fontFamily: 'var(--font-body)', fontSize: 'var(--text-xs)',
-              color: 'rgba(26,26,26,0.38)', marginTop: '4px',
-            }}>{siteConfig.email}</span>
+          {/* ── Motto / Quote ── */}
+          <div style={{ position: 'relative', zIndex: 1 }}>
+            {/* Opening quotation mark */}
+            <div style={{
+              fontFamily:    'var(--font-display)',
+              fontSize:      '3.5rem',
+              lineHeight:    0.6,
+              color:         'rgba(26,26,26,0.18)',
+              marginBottom:  '10px',
+              userSelect:    'none',
+            }}>"</div>
+
+            <p style={{
+              fontFamily:   'var(--font-body)',
+              fontWeight:   500,
+              fontSize:     '0.82rem',
+              lineHeight:   1.75,
+              color:        'rgba(26,26,26,0.72)',
+              fontStyle:    'italic',
+              marginBottom: '14px',
+            }}>
+              {/*
+                Ganti dengan motto atau kutipan favorit Nafis.
+              */}
+              Ilmu yang bermanfaat adalah ilmu yang diamalkan untuk sesama.
+            </p>
+
+            {/* Attribution line */}
+            <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+              <div style={{ width: '16px', height: '1.5px', backgroundColor: '#c94f35' }} />
+              <span style={{
+                fontFamily:    'var(--font-body)',
+                fontWeight:    700,
+                fontSize:      '0.58rem',
+                letterSpacing: '0.16em',
+                textTransform: 'uppercase',
+                color:         'rgba(26,26,26,0.45)',
+              }}>Moto Hidup</span>
+            </div>
           </div>
         </aside>
 
