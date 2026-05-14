@@ -12,7 +12,7 @@ const galeriItems = [
     year:     '2025',
     category: 'Konferensi',
     caption:  'Presentasi di Nama Konferensi, Kota',
-    src:      '/galeri/hijab_cantik.jpg',
+    src:      'public/galeri/hijab_cantik.jpg',
   },
   {
     id:       'foto-2',
