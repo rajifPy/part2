@@ -227,11 +227,10 @@ export default function TentangSayaClient() {
                   overflow: 'hidden',
                 }}
               >
-                {/*
-                  Punya foto? Ganti ini dengan:
-                  <img src="/foto-profil.jpg" alt={siteConfig.name}
+                {
+                  <img src="public/image/nafis.jpeg" alt={siteConfig.name}
                        style={{ width:'100%', height:'100%', objectFit:'cover' }} />
-                */}
+                   }
                 <span
                   className="ts-avatar-initials"
                   style={{
