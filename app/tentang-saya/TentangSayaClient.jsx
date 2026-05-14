@@ -262,7 +262,8 @@ export default function TentangSayaClient() {
                 height: '100%',
                 background: 'linear-gradient(to bottom, #c94f35, #6b1f3a)',
               }} />
-               
+            </div>
+
             {/* Name */}
             <p style={{
               fontFamily: 'var(--font-display)',
