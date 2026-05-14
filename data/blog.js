@@ -35,7 +35,7 @@ export const blogPosts = [
     body: `
 Era digital membawa perubahan besar dalam dunia pendidikan, termasuk Pendidikan Agama Islam (PAI). Tantangan terbesar bukan terletak pada teknologinya, melainkan pada bagaimana kita sebagai pendidik mampu **mengintegrasikan nilai-nilai Islam** ke dalam media yang relevan dengan kehidupan peserta didik.
 
-![alt](/image/hijab_cantik.jpg)
+![Gambar Pemanis Saja](/image/hijab_cantik.jpg)
 ## Mengapa Inovasi itu Perlu?
 
 Dalam pengalaman saya mengajar di bimbel dan PPL di MA Hasyim Asy'ari, saya menemukan bahwa siswa jauh lebih antusias ketika materi disajikan melalui media interaktif — video pendek, kuis digital, hingga diskusi berbasis aplikasi pesan.
