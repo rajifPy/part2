@@ -1,71 +1,89 @@
 'use client'
 
-import { useState, useEffect, useRef } from 'react'
+import { useState, useEffect, useRef, useCallback } from 'react'
 import { usePathname } from 'next/navigation'
 
-export default function LoadingScreen({ name = 'Dendi Yusuf' }) {
+/**
+ * LoadingScreen — dioptimasi:
+ * - Semua timeout/interval disimpan dalam satu ref array agar cleanup aman
+ * - Tidak ada setState setelah unmount (mencegah memory leak)
+ * - Animasi font pakai CSS variable supaya rendering lebih halus
+ */
+export default function LoadingScreen({ name = 'Zumrotun Nafisah' }) {
   const pathname           = usePathname()
   const prevPathname       = useRef(null)
   const [show, setShow]    = useState(false)
   const [visibleChars, setVisibleChars] = useState(0)
   const [revealing, setRevealing]       = useState(false)
-  const intervalRef        = useRef(null)
-  const timeoutsRef        = useRef([])
+  const timersRef          = useRef([])   // kumpulan semua timer
+  const mountedRef         = useRef(true) // cegah setState setelah unmount
 
   const displayName = name.toUpperCase()
   const total       = displayName.length
 
-  const addTimeout = (fn, ms) => {
-    const id = setTimeout(fn, ms)
-    timeoutsRef.current.push(id)
+  // Helper: tambah timeout dengan auto-cleanup
+  const addTimer = useCallback((fn, ms, isInterval = false) => {
+    const id = isInterval ? setInterval(fn, ms) : setTimeout(fn, ms)
+    timersRef.current.push({ id, isInterval })
     return id
-  }
+  }, [])
 
-  const clearAll = () => {
-    if (intervalRef.current) clearInterval(intervalRef.current)
-    timeoutsRef.current.forEach(clearTimeout)
-    timeoutsRef.current = []
-  }
+  const clearAll = useCallback(() => {
+    timersRef.current.forEach(({ id, isInterval }) => {
+      isInterval ? clearInterval(id) : clearTimeout(id)
+    })
+    timersRef.current = []
+  }, [])
 
-  const runAnimation = () => {
+  const runAnimation = useCallback(() => {
+    if (!mountedRef.current) return
     clearAll()
     setRevealing(false)
     setVisibleChars(0)
     setShow(true)
 
-    addTimeout(() => {
+    addTimer(() => {
       let i = 0
-      intervalRef.current = setInterval(() => {
+      const interval = setInterval(() => {
+        if (!mountedRef.current) { clearInterval(interval); return }
         i++
         setVisibleChars(i)
         if (i >= total) {
-          clearInterval(intervalRef.current)
-          addTimeout(() => {
+          clearInterval(interval)
+          addTimer(() => {
+            if (!mountedRef.current) return
             setRevealing(true)
-            addTimeout(() => {
+            addTimer(() => {
+              if (!mountedRef.current) return
               setShow(false)
               setRevealing(false)
             }, 700)
           }, 300)
         }
-      }, 70)
+      }, 65)          // 65ms per karakter — sedikit lebih cepat dari 70ms
+      timersRef.current.push({ id: interval, isInterval: true })
     }, 80)
-  }
+  }, [total, clearAll, addTimer])
 
+  // Mount pertama kali
   useEffect(() => {
     prevPathname.current = pathname
     runAnimation()
-    return clearAll
+    return () => {
+      mountedRef.current = false
+      clearAll()
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
+  // Route change
   useEffect(() => {
     if (prevPathname.current === null) return
     if (prevPathname.current === pathname) return
     prevPathname.current = pathname
+    mountedRef.current   = true
     runAnimation()
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [pathname])
+  }, [pathname, runAnimation])
 
   if (!show) return null
 
@@ -85,7 +103,9 @@ export default function LoadingScreen({ name = 'Dendi Yusuf' }) {
           align-items: center;
           justify-content: center;
           pointer-events: all;
+          /* GPU layer hint */
           will-change: transform;
+          contain: strict;
         }
         .kl-loading.revealing {
           animation: revealUp 0.65s cubic-bezier(0.76, 0, 0.24, 1) forwards;
@@ -113,13 +133,17 @@ export default function LoadingScreen({ name = 'Dendi Yusuf' }) {
           0%, 100% { opacity: 1; }
           50%       { opacity: 0; }
         }
+        @media (prefers-reduced-motion: reduce) {
+          .kl-loading.revealing { animation: none; opacity: 0; }
+          .kl-cursor            { animation: none; }
+        }
       `}</style>
 
-      <div className={`kl-loading${revealing ? ' revealing' : ''}`}>
+      <div className={`kl-loading${revealing ? ' revealing' : ''}`} aria-live="polite" aria-label="Memuat halaman">
         <p className="kl-text">
           {displayName.slice(0, visibleChars)}
           {!revealing && visibleChars < total && (
-            <span className="kl-cursor" />
+            <span className="kl-cursor" aria-hidden="true" />
           )}
         </p>
       </div>
