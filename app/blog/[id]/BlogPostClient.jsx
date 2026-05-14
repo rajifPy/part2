@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react'
 import Link from 'next/link'
+import ReactMarkdown from 'react-markdown'
 import { blogPosts } from '@/data/blog'
 
 export default function BlogPostClient({ params }) {
@@ -72,6 +73,139 @@ export default function BlogPostClient({ params }) {
           position: fixed; top: 0; left: 0; height: 3px;
           background: ${post.color};
           z-index: 999; transition: width 0.1s linear;
+        }
+
+        /* ── Markdown content styles ── */
+        .md-content p {
+          font-family: var(--font-body);
+          font-size: clamp(0.95rem, 1.6vw, 1.05rem);
+          line-height: 1.9;
+          color: #2a2a2a;
+          margin-bottom: 24px;
+        }
+
+        .md-content h2 {
+          font-family: var(--font-display);
+          font-size: clamp(1.3rem, 2.5vw, 1.8rem);
+          letter-spacing: 0.03em;
+          text-transform: uppercase;
+          color: #1a1a1a;
+          margin: 40px 0 16px;
+          line-height: 1.0;
+        }
+
+        .md-content h3 {
+          font-family: var(--font-display);
+          font-size: clamp(1.1rem, 2vw, 1.4rem);
+          letter-spacing: 0.03em;
+          text-transform: uppercase;
+          color: #1a1a1a;
+          margin: 32px 0 12px;
+          line-height: 1.0;
+        }
+
+        .md-content img {
+          width: 100%;
+          display: block;
+          border: 2px solid #1a1a1a;
+          margin: 32px 0 8px;
+        }
+
+        .md-content figure {
+          margin: 32px 0;
+        }
+
+        .md-content figcaption {
+          font-family: var(--font-body);
+          font-size: 0.72rem;
+          color: #888;
+          margin-top: 8px;
+          letter-spacing: 0.06em;
+          font-style: italic;
+        }
+
+        .md-content a {
+          color: ${post.color};
+          text-decoration: underline;
+          font-weight: 600;
+          transition: opacity 0.15s;
+        }
+        .md-content a:hover { opacity: 0.75; }
+
+        .md-content strong {
+          font-weight: 700;
+          color: #1a1a1a;
+        }
+
+        .md-content em {
+          font-style: italic;
+          color: #444;
+        }
+
+        .md-content ul,
+        .md-content ol {
+          font-family: var(--font-body);
+          font-size: clamp(0.95rem, 1.6vw, 1.05rem);
+          line-height: 1.9;
+          color: #2a2a2a;
+          margin-bottom: 24px;
+          padding-left: 24px;
+        }
+
+        .md-content li {
+          margin-bottom: 6px;
+        }
+
+        .md-content li::marker {
+          color: ${post.color};
+          font-weight: 700;
+        }
+
+        .md-content blockquote {
+          border-left: 4px solid ${post.color};
+          margin: 32px 0;
+          padding: 16px 24px;
+          background: rgba(0,0,0,0.03);
+        }
+
+        .md-content blockquote p {
+          font-size: clamp(1rem, 1.8vw, 1.1rem);
+          font-style: italic;
+          color: #444;
+          margin-bottom: 0;
+        }
+
+        .md-content code {
+          font-family: 'Courier New', monospace;
+          font-size: 0.88em;
+          background: #f0eeea;
+          border: 1px solid #d0cec8;
+          padding: 2px 6px;
+          color: ${post.color};
+        }
+
+        .md-content pre {
+          background: #1a1a1a;
+          border: 2px solid #1a1a1a;
+          padding: 20px 24px;
+          overflow-x: auto;
+          margin: 24px 0;
+        }
+
+        .md-content pre code {
+          background: none;
+          border: none;
+          padding: 0;
+          color: #f0eeea;
+          font-size: 0.85rem;
+          line-height: 1.7;
+        }
+
+        .md-content hr {
+          border: none;
+          height: 2px;
+          background: linear-gradient(to right, ${post.color}, transparent);
+          margin: 40px 0;
         }
 
         @media (max-width: 768px) {
@@ -195,15 +329,35 @@ export default function BlogPostClient({ params }) {
               marginBottom: '32px',
             }} />
 
-            {/* Body paragraphs */}
-            {post.body.map((para, i) => (
-              <p key={i} style={{
-                fontFamily: 'var(--font-body)',
-                fontSize: 'clamp(0.95rem,1.6vw,1.05rem)',
-                lineHeight: 1.9, color: '#2a2a2a',
-                marginBottom: '24px',
-              }}>{para}</p>
-            ))}
+            {/* ── Markdown body ── */}
+            <div className="md-content">
+              <ReactMarkdown
+                components={{
+                  // Gambar dengan caption otomatis dari alt text
+                  img: ({ src, alt }) => (
+                    <figure>
+                      <img src={src} alt={alt} />
+                      {alt && <figcaption>{alt}</figcaption>}
+                    </figure>
+                  ),
+                  // Link buka tab baru jika eksternal
+                  a: ({ href, children }) => {
+                    const isExternal = href?.startsWith('http')
+                    return (
+                      <a
+                        href={href}
+                        target={isExternal ? '_blank' : '_self'}
+                        rel={isExternal ? 'noopener noreferrer' : undefined}
+                      >
+                        {children}
+                      </a>
+                    )
+                  },
+                }}
+              >
+                {post.body}
+              </ReactMarkdown>
+            </div>
 
             {/* Tags */}
             <div style={{ marginTop: '40px', paddingTop: '24px', borderTop: '2px solid #1a1a1a' }}>
