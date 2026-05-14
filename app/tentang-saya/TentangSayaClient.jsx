@@ -8,8 +8,8 @@ import { siteConfig } from '@/data/config'
 ══════════════════════════════════════════ */
 const SLIDE_PHOTOS = [
   { src: '/image/nafis.jpeg',  caption: 'Foto 1' },
-  { src: '/image/nafis2.jpeg', caption: 'Foto 2' },
-  { src: '/image/nafis3.jpeg', caption: 'Foto 3' },
+  { src: '/image/profile2.jpeg', caption: 'Foto 2' },
+  { src: '/image/profile3.jpeg', caption: 'Foto 3' },
 ]
 
 /* ══════════════════════════════════════════
