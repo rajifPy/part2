@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useRef } from 'react'
 import { siteConfig } from '@/data/config'
+import CVDownloadButton from '@/components/ui/CVDownloadButton'
 
 /* ══════════════════════════════════════════
    FOTO SLIDESHOW — tambahkan path foto kamu
@@ -544,6 +545,11 @@ export default function TentangSayaClient() {
                 fontFamily: 'var(--font-body)', fontWeight: 700, fontSize: '0.6rem',
                 letterSpacing: '0.16em', textTransform: 'uppercase', color: '#c94f35',
               }}>Moto Hidup</span>
+            </div>
+
+            {/* CV Download */}
+            <div className="ts-email-btn" style={{ marginBottom: '12px' }}>
+              <CVDownloadButton />
             </div>
 
             {/* Email CTA */}
