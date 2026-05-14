@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useCallback } from 'react
+import { useState, useCallback } from 'react'
 
 const STEPS = [
   { pct: 15, label: 'Menyiapkan file...',    ms: 320 },
