@@ -375,13 +375,6 @@ export default function TentangSayaClient() {
                 Fokus akademik saya berpusat pada inovasi pembelajaran Islam dan literasi digital,
                 dengan komitmen untuk mengemas nilai-nilai keagamaan melalui pendekatan yang modern.
               </p>
-              <p style={{ fontFamily: 'var(--font-body)', fontSize: '1rem', lineHeight: 1.9, color: '#3a3a3a', marginBottom: '18px' }}>
-                Riwayat pendidikan saya dimulai dari MTs Hasyim Asy&apos;ari Bangsri (2016–2019),
-                dilanjutkan MA Hasyim Asy&apos;ari Bangsri (2019–2022), hingga kini menempuh S1 PAI
-                di UNISNU Jepara (2023–Sekarang). Pengalaman lapangan mencakup KKL di Universitas
-                Negeri Jakarta (Juni 2025) dan PPL/MdSM di MA Hasyim Asy&apos;ari Bangsri
-                (Februari–Maret 2026).
-              </p>
             </div>
 
             <div className="ts-divider" />
