@@ -89,7 +89,6 @@ export default function Footer() {
           background-color: rgba(240,238,234,0.08);
         }
 
-        /* Warna aksen per platform saat hover */
         .footer-icon-btn--instagram:hover { color: #e1306c; }
         .footer-icon-btn--linkedin:hover  { color: #0a66c2; }
         .footer-icon-btn--email:hover     { color: #c94f35; }
@@ -105,9 +104,9 @@ export default function Footer() {
         }
 
         .footer-sep {
-          width:      1px;
-          height:     32px;
-          background: rgba(240,238,234,0.08);
+          width:       1px;
+          height:      32px;
+          background:  rgba(240,238,234,0.08);
           flex-shrink: 0;
         }
 
@@ -126,7 +125,7 @@ export default function Footer() {
         }
       `}</style>
 
-      {{/* Icon row */}
+      {/* Icon row */}
       <div className="footer-icons-row">
         {SOCIAL_LINKS.map((s, i) => (
           <span key={s.key} style={{ display: 'flex', alignItems: 'center' }}>
@@ -146,6 +145,7 @@ export default function Footer() {
           </span>
         ))}
       </div>
+
       {/* Copyright */}
       <p className="footer-copy">
         © {new Date().getFullYear()} {siteConfig.name} — nafisPPHA@2026
