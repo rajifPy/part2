@@ -228,7 +228,7 @@ export default function TentangSayaClient() {
                 }}
               >
                 {
-                  <img src="public/image/nafis.jpeg" alt={siteConfig.name}
+                  <img src="/image/nafis.jpeg" alt={siteConfig.name}
                        style={{ width:'100%', height:'100%', objectFit:'cover' }} />
                    }
                 <span
