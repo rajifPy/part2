@@ -493,13 +493,13 @@ export default function TentangSayaClient() {
 
             {/* Bio */}
             <div className="ts-bio-block">
-              <p style={{ fontFamily: 'var(--font-body)', fontSize: '1rem', lineHeight: 1.9, color: '#3a3a3a', marginBottom: '18px' }}>
+              <p style={{ fontFamily: 'var(--font-body)', fontSize: '1rem', lineHeight: 1.9, color: '#3a3a3a', marginBottom: '18px', textAlign: 'justify', textIndent: '2em' }}>
                 Saya adalah mahasiswi Program Studi Pendidikan Agama Islam di Universitas Islam
                 Nahdlatul Ulama (UNISNU) Jepara yang menempuh studi sejak tahun 2023. Saya percaya
                 bahwa pendidikan adalah tentang adaptasi dan memberikan dampak nyata yang relevan
                 dengan perkembangan zaman yang serba cepat.
               </p>
-              <p style={{ fontFamily: 'var(--font-body)', fontSize: '1rem', lineHeight: 1.9, color: '#3a3a3a', marginBottom: '18px' }}>
+              <p style={{ fontFamily: 'var(--font-body)', fontSize: '1rem', lineHeight: 1.9, color: '#3a3a3a', marginBottom: '18px', textAlign: 'justify', textIndent: '2em' }}>
                 Fokus akademik saya berpusat pada inovasi pembelajaran Islam dan literasi digital,
                 dengan komitmen untuk mengemas nilai-nilai keagamaan melalui pendekatan yang modern.
               </p>
