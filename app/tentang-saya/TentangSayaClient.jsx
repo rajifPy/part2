@@ -262,21 +262,7 @@ export default function TentangSayaClient() {
                 height: '100%',
                 background: 'linear-gradient(to bottom, #c94f35, #6b1f3a)',
               }} />
-
-              {/* Bottom-right accent dot */}
-              <div style={{
-                position: 'absolute',
-                bottom: '-3px',
-                right: '-3px',
-                width: '22px',
-                height: '22px',
-                backgroundColor: '#c94f35',
-                borderRadius: '50%',
-                border: '3px solid #e8a8c0',
-                zIndex: 2,
-              }} />
-            </div>
-
+               
             {/* Name */}
             <p style={{
               fontFamily: 'var(--font-display)',
