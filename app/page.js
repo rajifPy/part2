@@ -273,7 +273,7 @@ export default function HomePage() {
             {/* Info chips */}
             <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap', marginBottom: '40px' }}>
               {[
-                { label: 'Kota',    val: 'Surabaya'  },
+                { label: 'Kota',    val: 'Jepara'  },
                 { label: 'Prodi',   val: 'PAI'        },
                 { label: 'Status',  val: 'Mahasiswa'  },
               ].map(({ label, val }) => (
