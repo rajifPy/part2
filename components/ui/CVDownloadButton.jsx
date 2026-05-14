@@ -10,7 +10,7 @@ const STEPS = [
   { pct: 100, label: 'Selesai!',              ms: 240 },
 ]
 
-export default function CVDownloadButton({ filePath = '/cv-nafisah.pdf', fileName = 'CV-Zumrotun-Nafisah.pdf' }) {
+export default function CVDownloadButton({ filePath = '/cv.pdf', fileName = 'CV-Zumrotun-Nafisah.pdf' }) {
   const [phase, setPhase]     = useState('idle')   // idle | loading | done
   const [progress, setProgress] = useState(0)
   const [label, setLabel]     = useState('Menyiapkan file...')
