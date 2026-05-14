@@ -2,7 +2,7 @@
 
 import Link            from 'next/link'
 import { usePathname } from 'next/navigation'
-import { useState, useRef, useCallback }    from 'react'
+import { useState, useRef, useCallback, useEffect }    from 'react'
 import { siteConfig }  from '@/data/config'
 
 const TAB_COLORS = {
@@ -28,21 +28,22 @@ function adjustAlpha(hexOrRgb, alpha) {
 export default function Navbar() {
   const pathname = usePathname()
   const [menuOpen, setMenuOpen] = useState(false)
+  const audioRef = useRef(null)
 
-  // ── Sound effect ──────────────────────────────────────────
-  const audioRef  = useRef(null)
+  // Preload audio saat komponen mount agar siap dimainkan instan saat klik
+  useEffect(() => {
+    const audio = new Audio('/image/BUBBLE_EFFECT.mp3')
+    audio.preload = 'auto'   // minta browser buffer audio sekarang
+    audio.volume  = 0.35
+    audioRef.current = audio
+  }, [])
 
   const playSound = useCallback(() => {
-    // Lazy-init audio supaya tidak memblokir render pertama
-    if (!audioRef.current) {
-      audioRef.current = new Audio('/image/BUBBLE_EFFECT.mp3')
-      audioRef.current.volume = 0.35
-    }
     const audio = audioRef.current
-    audio.currentTime = 0          // reset agar rapid-click tetap bunyi
-    audio.play().catch(() => {})   // silent fail jika browser blokir autoplay
+    if (!audio) return
+    audio.currentTime = 0        // reset agar rapid-click tetap bunyi
+    audio.play().catch(() => {}) // silent fail jika browser blokir autoplay
   }, [])
-  // ─────────────────────────────────────────────────────────
 
   return (
     <header style={{ position: 'sticky', top: 0, zIndex: 100 }}>
