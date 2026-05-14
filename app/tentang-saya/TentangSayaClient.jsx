@@ -7,16 +7,16 @@ import { siteConfig } from '@/data/config'
    DATA — sesuaikan dengan profil Nafis
 ══════════════════════════════════════════ */
 const STATS = [
-  { value: '2+',  label: 'Tahun Mengajar' },
-  { value: '3',   label: 'Mata Pelajaran' },
-  { value: '40+', label: 'Siswa Bimbel'   },
+  { value: '2+', label: 'Tahun Mengajar' },
+  { value: '3', label: 'Mata Pelajaran' },
+  { value: '40+', label: 'Siswa Bimbel' },
 ]
 
 const SKILLS = [
-  { label: 'Pendidikan Agama Islam',  pct: 90, color: '#c94f35' },
-  { label: 'Bahasa Arab',             pct: 78, color: '#8a7d3a' },
-  { label: 'Metode Pembelajaran',     pct: 82, color: '#6b1f3a' },
-  { label: 'Komunikasi & Dakwah',     pct: 75, color: '#d4604a' },
+  { label: 'Pendidikan Agama Islam', pct: 90, color: '#c94f35' },
+  { label: 'Bahasa Arab', pct: 78, color: '#8a7d3a' },
+  { label: 'Metode Pembelajaran', pct: 82, color: '#6b1f3a' },
+  { label: 'Komunikasi & Dakwah', pct: 75, color: '#d4604a' },
 ]
 
 const INTERESTS = [
@@ -93,7 +93,7 @@ function StatCard({ value, label, index, mounted }) {
    MAIN
 ══════════════════════════════════════════ */
 export default function TentangSayaClient() {
-  const [mounted, setMounted]    = useState(false)
+  const [mounted, setMounted] = useState(false)
   const [skillRef, skillStarted] = useSkillReveal()
 
   useEffect(() => { setMounted(true) }, [])
@@ -197,105 +197,129 @@ export default function TentangSayaClient() {
           style={{ backgroundColor: '#e8a8c0', overflow: 'hidden', position: 'relative' }}
         >
           {/* Decorative rings */}
-          <div className="ts-deco" style={{ position:'absolute', top:'-80px', right:'-80px', width:'260px', height:'260px', borderRadius:'50%', border:'1.5px solid rgba(26,26,26,0.08)', pointerEvents:'none' }} />
-          <div className="ts-deco" style={{ position:'absolute', top:'-35px', right:'-35px', width:'150px', height:'150px', borderRadius:'50%', border:'1.5px solid rgba(26,26,26,0.06)', pointerEvents:'none' }} />
-          <div className="ts-deco" style={{ position:'absolute', bottom:'50px', left:'-55px', width:'170px', height:'170px', borderRadius:'50%', border:'1.5px solid rgba(26,26,26,0.05)', pointerEvents:'none' }} />
+          <div className="ts-deco" style={{ position: 'absolute', top: '-80px', right: '-80px', width: '260px', height: '260px', borderRadius: '50%', border: '1.5px solid rgba(26,26,26,0.08)', pointerEvents: 'none' }} />
+          <div className="ts-deco" style={{ position: 'absolute', top: '-35px', right: '-35px', width: '150px', height: '150px', borderRadius: '50%', border: '1.5px solid rgba(26,26,26,0.06)', pointerEvents: 'none' }} />
+          <div className="ts-deco" style={{ position: 'absolute', bottom: '50px', left: '-55px', width: '170px', height: '170px', borderRadius: '50%', border: '1.5px solid rgba(26,26,26,0.05)', pointerEvents: 'none' }} />
 
           {/* ── Avatar ── */}
           <div style={{ position: 'relative', zIndex: 1 }}>
             <div
               className="ts-avatar-wrap"
-              style={{ position: 'relative', width: '130px', height: '130px', marginBottom: '24px' }}
+              style={{ position: 'relative', width: '160px', height: '200px', marginBottom: '24px' }}
             >
-              {/* Offset shadow square */}
-              <div
-                className="ts-avatar-sq-shadow"
-                style={{
-                  position: 'absolute', top: '10px', left: '10px',
-                  width: '130px', height: '130px',
-                  backgroundColor: 'rgba(26,26,26,0.2)',
-                }}
-              />
-              {/* Main avatar square */}
-              <div
-                className="ts-avatar-sq"
-                style={{
-                  position: 'absolute', top: 0, left: 0,
-                  width: '130px', height: '130px',
-                  backgroundColor: '#1a1a1a',
-                  display: 'flex', alignItems: 'center', justifyContent: 'center',
-                  overflow: 'hidden',
-                }}
-              >
-                {
-                  <img src="/image/nafis.jpeg" alt={siteConfig.name}
-                       style={{ width:'100%', height:'100%', objectFit:'cover' }} />
-                   }
-                <span
-                  className="ts-avatar-initials"
-                  style={{
-                    fontFamily: 'var(--font-display)', fontSize: '4.2rem',
-                    color: '#e8a8c0', letterSpacing: '0.04em',
-                    userSelect: 'none', lineHeight: 1,
-                  }}
-                >
-                  {siteConfig.name.charAt(0)}
-                </span>
+              {/* Offset shadow */}
+              <div style={{
+                position: 'absolute',
+                top: '10px',
+                left: '10px',
+                width: '160px',
+                height: '200px',
+                backgroundColor: 'rgba(26,26,26,0.2)',
+              }} />
+
+              {/* Card foto full cover */}
+              <div style={{
+                position: 'absolute',
+                top: 0,
+                left: 0,
+                width: '160px',
+                height: '200px',
+                overflow: 'hidden',
+              }}>
+                {siteConfig.avatarUrl
+                  ? <img
+                    src={siteConfig.avatarUrl}
+                    alt={siteConfig.name}
+                    style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'top center' }}
+                  />
+                  : <div style={{
+                    width: '100%',
+                    height: '100%',
+                    backgroundColor: '#1a1a1a',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                  }}>
+                    <span style={{
+                      fontFamily: 'var(--font-display)',
+                      fontSize: '5rem',
+                      color: '#e8a8c0',
+                      lineHeight: 1,
+                      userSelect: 'none',
+                    }}>
+                      {siteConfig.name.charAt(0)}
+                    </span>
+                  </div>
+                }
               </div>
 
               {/* Left accent stripe */}
               <div style={{
-                position: 'absolute', top: 0, left: '-10px',
-                width: '4px', height: '100%',
+                position: 'absolute',
+                top: 0,
+                left: '-10px',
+                width: '4px',
+                height: '100%',
                 background: 'linear-gradient(to bottom, #c94f35, #6b1f3a)',
               }} />
 
               {/* Bottom-right accent dot */}
               <div style={{
-                position: 'absolute', bottom: '-3px', right: '-3px',
-                width: '22px', height: '22px',
-                backgroundColor: '#c94f35', borderRadius: '50%',
-                border: '3px solid #e8a8c0', zIndex: 2,
+                position: 'absolute',
+                bottom: '-3px',
+                right: '-3px',
+                width: '22px',
+                height: '22px',
+                backgroundColor: '#c94f35',
+                borderRadius: '50%',
+                border: '3px solid #e8a8c0',
+                zIndex: 2,
               }} />
             </div>
 
             {/* Name */}
             <p style={{
-              fontFamily: 'var(--font-display)', fontSize: 'clamp(1.5rem, 2.4vw, 2rem)',
-              letterSpacing: '0.03em', textTransform: 'uppercase',
-              color: '#1a1a1a', lineHeight: 1, marginBottom: '10px',
+              fontFamily: 'var(--font-display)',
+              fontSize: 'clamp(1.5rem, 2.4vw, 2rem)',
+              letterSpacing: '0.03em',
+              textTransform: 'uppercase',
+              color: '#1a1a1a',
+              lineHeight: 1,
+              marginBottom: '10px',
             }}>{siteConfig.name}</p>
 
             {/* Role row */}
             <div className="ts-role-row" style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
               <div style={{ width: '20px', height: '2px', backgroundColor: '#c94f35', flexShrink: 0 }} />
               <p style={{
-                fontFamily: 'var(--font-body)', fontWeight: 700,
-                fontSize: '0.6rem', letterSpacing: '0.18em', textTransform: 'uppercase',
+                fontFamily: 'var(--font-body)',
+                fontWeight: 700,
+                fontSize: '0.6rem',
+                letterSpacing: '0.18em',
+                textTransform: 'uppercase',
                 color: 'rgba(26,26,26,0.6)',
               }}>{siteConfig.role}</p>
             </div>
           </div>
-
           {/* ── Motto / Quote ── */}
           <div style={{ position: 'relative', zIndex: 1 }}>
             {/* Opening quotation mark */}
             <div style={{
-              fontFamily:    'var(--font-display)',
-              fontSize:      '3.5rem',
-              lineHeight:    0.6,
-              color:         'rgba(26,26,26,0.18)',
-              marginBottom:  '10px',
-              userSelect:    'none',
+              fontFamily: 'var(--font-display)',
+              fontSize: '3.5rem',
+              lineHeight: 0.6,
+              color: 'rgba(26,26,26,0.18)',
+              marginBottom: '10px',
+              userSelect: 'none',
             }}>"</div>
 
             <p style={{
-              fontFamily:   'var(--font-body)',
-              fontWeight:   500,
-              fontSize:     '0.82rem',
-              lineHeight:   1.75,
-              color:        'rgba(26,26,26,0.72)',
-              fontStyle:    'italic',
+              fontFamily: 'var(--font-body)',
+              fontWeight: 500,
+              fontSize: '0.82rem',
+              lineHeight: 1.75,
+              color: 'rgba(26,26,26,0.72)',
+              fontStyle: 'italic',
               marginBottom: '14px',
             }}>
               {/*
@@ -308,12 +332,12 @@ export default function TentangSayaClient() {
             <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
               <div style={{ width: '16px', height: '1.5px', backgroundColor: '#c94f35' }} />
               <span style={{
-                fontFamily:    'var(--font-body)',
-                fontWeight:    700,
-                fontSize:      '0.58rem',
+                fontFamily: 'var(--font-body)',
+                fontWeight: 700,
+                fontSize: '0.58rem',
                 letterSpacing: '0.16em',
                 textTransform: 'uppercase',
-                color:         'rgba(26,26,26,0.45)',
+                color: 'rgba(26,26,26,0.45)',
               }}>Moto Hidup</span>
             </div>
           </div>
