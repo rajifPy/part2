@@ -12,7 +12,7 @@ const TIMELINE = [
     year:     '2023 — Sekarang',
     category: 'Pendidikan',
     color:    '#c94f35',
-    title:    'Mahasiswa Pendidikan Agama Islam',
+    title:    'Mahasiswi Pendidikan Agama Islam',
     place:    'UNISNU — Jepara',
     body:     'Menempuh pendidikan S1 Program Studi Pendidikan Agama Islam. Aktif dalam perkuliahan, diskusi akademik, dan kegiatan kemahasiswaan. Fokus pada kajian kurikulum PAI dan metode pembelajaran Islam modern.',
     tags:     ['Akademik', 'PAI', 'S1'],
