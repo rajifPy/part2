@@ -4,6 +4,16 @@ import { useState, useEffect, useRef } from 'react'
 import { siteConfig } from '@/data/config'
 
 /* ══════════════════════════════════════════
+   FOTO SLIDESHOW — tambahkan path foto kamu
+══════════════════════════════════════════ */
+const SLIDE_PHOTOS = [
+  { src: '/image/nafis.jpeg',  caption: 'Foto 1' },
+  { src: '/image/nafis2.jpeg', caption: 'Foto 2' },
+  { src: '/image/nafis3.jpeg', caption: 'Foto 3' },
+  // Tambah foto lagi di sini jika ada
+]
+
+/* ══════════════════════════════════════════
    DATA — sesuaikan dengan profil Nafis
 ══════════════════════════════════════════ */
 const STATS = [
@@ -14,9 +24,9 @@ const STATS = [
 
 const SKILLS = [
   { label: 'Pendidikan Agama Islam', pct: 90, color: '#c94f35' },
-  { label: 'Inovasi Pembelajaran', pct: 82, color: '#8a7d3a' },
-  { label: 'Literasi Digital', pct: 78, color: '#6b1f3a' },
-  { label: 'Komunikasi & Dakwah', pct: 75, color: '#d4604a' },
+  { label: 'Inovasi Pembelajaran',   pct: 82, color: '#8a7d3a' },
+  { label: 'Literasi Digital',       pct: 78, color: '#6b1f3a' },
+  { label: 'Komunikasi & Dakwah',    pct: 75, color: '#d4604a' },
 ]
 
 const INTERESTS = [
@@ -96,7 +106,25 @@ export default function TentangSayaClient() {
   const [mounted, setMounted] = useState(false)
   const [skillRef, skillStarted] = useSkillReveal()
 
-  useEffect(() => { setMounted(true) }, [])
+  // Slideshow state
+  const [slideIdx, setSlideIdx] = useState(0)
+  const timerRef = useRef(null)
+
+  const goTo = (n) => {
+    setSlideIdx(n)
+    clearInterval(timerRef.current)
+    timerRef.current = setInterval(() => {
+      setSlideIdx(i => (i + 1) % SLIDE_PHOTOS.length)
+    }, 4500)
+  }
+
+  useEffect(() => {
+    setMounted(true)
+    timerRef.current = setInterval(() => {
+      setSlideIdx(i => (i + 1) % SLIDE_PHOTOS.length)
+    }, 4500)
+    return () => clearInterval(timerRef.current)
+  }, [])
 
   return (
     <>
@@ -109,19 +137,76 @@ export default function TentangSayaClient() {
           from { opacity: 0; }
           to   { opacity: 1; }
         }
-        @keyframes avatarReveal {
-          0%   { opacity: 0; transform: translate(8px, 8px) scale(0.9); }
-          65%  { transform: translate(-2px, -2px) scale(1.02); }
-          100% { opacity: 1; transform: translate(0,0) scale(1); }
+
+        .ts-name-text  { animation: fadeSlideUp 0.6s ease 0.3s both; }
+        .ts-role-row   { animation: fadeSlideUp 0.5s ease 0.4s both; }
+        .ts-bio-block  { animation: fadeSlideUp 0.6s ease 0.45s both; }
+        .ts-interests  { animation: fadeIn 0.6s ease 0.6s both; }
+        .ts-email-btn  { animation: fadeIn 0.5s ease 0.7s both; }
+
+        /* ── Slideshow sidebar ── */
+        .ts-sidebar-slide {
+          position: absolute;
+          inset: 0;
+          background-size: cover;
+          background-position: center top;
+          opacity: 0;
+          transition: opacity 1.2s ease;
+        }
+        .ts-sidebar-slide.active { opacity: 1; }
+
+        .ts-slide-overlay {
+          position: absolute;
+          inset: 0;
+          background: linear-gradient(
+            160deg,
+            rgba(15,10,30,0.52) 0%,
+            rgba(15,10,30,0.28) 38%,
+            rgba(10,6,22,0.82) 100%
+          );
+          z-index: 5;
         }
 
-        .ts-avatar-wrap { animation: avatarReveal 0.7s cubic-bezier(0.22,1,0.36,1) 0.1s both; }
-        .ts-name-text   { animation: fadeSlideUp 0.6s ease 0.3s both; }
-        .ts-role-row    { animation: fadeSlideUp 0.5s ease 0.4s both; }
-        .ts-bio-block   { animation: fadeSlideUp 0.6s ease 0.45s both; }
-        .ts-interests   { animation: fadeIn 0.6s ease 0.6s both; }
-        .ts-email-btn   { animation: fadeIn 0.5s ease 0.7s both; }
+        .ts-sidebar-content {
+          position: relative;
+          z-index: 10;
+          height: 100%;
+          min-height: calc(100vh - var(--nav-height));
+          padding: 32px 28px;
+          display: flex;
+          flex-direction: column;
+          justify-content: space-between;
+        }
 
+        .ts-dot-btn {
+          border: none;
+          cursor: pointer;
+          padding: 0;
+          transition: all 0.4s ease;
+          flex-shrink: 0;
+        }
+
+        .ts-nav-arrow {
+          width: 30px;
+          height: 30px;
+          border-radius: 50%;
+          border: 1px solid rgba(255,255,255,0.28);
+          background: rgba(255,255,255,0.1);
+          color: rgba(255,255,255,0.85);
+          cursor: pointer;
+          font-size: 15px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          transition: background 0.2s, color 0.2s;
+          line-height: 1;
+        }
+        .ts-nav-arrow:hover {
+          background: rgba(255,255,255,0.24);
+          color: #fff;
+        }
+
+        /* ── Main content tags ── */
         .ts-tag {
           display: inline-block;
           font-family: var(--font-body); font-weight: 700;
@@ -142,7 +227,7 @@ export default function TentangSayaClient() {
           transition: background-color 0.15s, color 0.15s, border-color 0.15s;
           word-break: break-all; max-width: 100%;
         }
-        .ts-email-cta:hover { background-color: #e8a8c0; border-color: #e8a8c0; color: #1a1a1a; }
+        .ts-email-cta:hover { background-color: #c94f35; border-color: #c94f35; color: #f0eeea; }
 
         .ts-divider {
           height: 2px;
@@ -156,174 +241,160 @@ export default function TentangSayaClient() {
         }
 
         /* ── RESPONSIVE ── */
-        @media (max-width: 960px) {
-          .ts-sidebar { padding: 32px 20px !important; }
-          .ts-content { padding: clamp(20px,4vw,36px) clamp(16px,4vw,28px) 40px !important; }
-        }
-
         @media (max-width: 768px) {
           .ts-layout  { flex-direction: column !important; }
           .ts-sidebar {
-            width: 100% !important; min-height: auto !important;
+            width: 100% !important;
+            min-height: 280px !important;
             position: static !important;
-            flex-direction: row !important; align-items: center !important;
-            justify-content: space-between !important;
-            flex-wrap: wrap !important; gap: 20px !important;
-            padding: 28px 20px !important;
           }
-          .ts-deco    { display: none !important; }
-          .ts-sidebar-social { flex-direction: row !important; flex-wrap: wrap !important; gap: 8px 14px !important; }
-          .ts-avatar-sq        { width: 88px !important; height: 88px !important; }
-          .ts-avatar-sq-shadow { width: 88px !important; height: 88px !important; }
-          .ts-avatar-wrap      { width: 88px !important; height: 88px !important; }
-          .ts-avatar-initials  { font-size: 3rem !important; }
-          .ts-stats > div { flex: 1 1 80px !important; }
+          .ts-sidebar-content {
+            min-height: 280px !important;
+            padding: 20px !important;
+          }
           .ts-content { padding: 20px 20px 40px !important; }
+          .ts-stats > div { flex: 1 1 80px !important; }
         }
 
         @media (max-width: 480px) {
-          .ts-sidebar { flex-direction: column !important; align-items: flex-start !important; padding: 20px 16px !important; }
           .ts-content { padding: 16px 16px 32px !important; }
         }
       `}</style>
 
       <div className="ts-layout" style={{ display: 'flex', minHeight: 'calc(100vh - var(--nav-height))' }}>
 
-        {/* ══════════════════
-            SIDEBAR
-        ══════════════════ */}
+        {/* ══════════════════════════════
+            SIDEBAR — FOTO SLIDESHOW
+        ══════════════════════════════ */}
         <aside
           className="ts-sidebar page-sidebar page-sidebar--sticky"
-          style={{ backgroundColor: '#e8a8c0', overflow: 'hidden', position: 'relative' }}
+          style={{
+            overflow: 'hidden',
+            position: 'relative',
+            padding: 0,
+            backgroundColor: '#1a1a1a', /* fallback saat foto belum load */
+          }}
         >
-          {/* Decorative rings */}
-          <div className="ts-deco" style={{ position: 'absolute', top: '-80px', right: '-80px', width: '260px', height: '260px', borderRadius: '50%', border: '1.5px solid rgba(26,26,26,0.08)', pointerEvents: 'none' }} />
-          <div className="ts-deco" style={{ position: 'absolute', top: '-35px', right: '-35px', width: '150px', height: '150px', borderRadius: '50%', border: '1.5px solid rgba(26,26,26,0.06)', pointerEvents: 'none' }} />
-          <div className="ts-deco" style={{ position: 'absolute', bottom: '50px', left: '-55px', width: '170px', height: '170px', borderRadius: '50%', border: '1.5px solid rgba(26,26,26,0.05)', pointerEvents: 'none' }} />
+          {/* Accent bar kiri */}
+          <div style={{
+            position: 'absolute', left: 0, top: 0,
+            width: '4px', height: '100%',
+            background: 'linear-gradient(to bottom, #c94f35, #8a7d3a 60%, #6b1f3a)',
+            zIndex: 20,
+          }} />
 
-          {/* ── Avatar ── */}
-          <div style={{ position: 'relative', zIndex: 1 }}>
+          {/* Slide foto */}
+          {SLIDE_PHOTOS.map((photo, i) => (
             <div
-              className="ts-avatar-wrap"
-              style={{ position: 'relative', width: '160px', height: '200px', marginBottom: '24px' }}
-            >
-              {/* Offset shadow */}
-              <div style={{
-                position: 'absolute',
-                top: '10px',
-                left: '10px',
-                width: '160px',
-                height: '200px',
-                backgroundColor: 'rgba(26,26,26,0.2)',
-              }} />
+              key={i}
+              className={`ts-sidebar-slide${i === slideIdx ? ' active' : ''}`}
+              style={{ backgroundImage: `url(${photo.src})` }}
+            />
+          ))}
 
-              {/* Card foto full cover */}
-              <div style={{
-                position: 'absolute',
-                top: 0,
-                left: 0,
-                width: '160px',
-                height: '200px',
-                overflow: 'hidden',
-              }}>
-                {siteConfig.avatarUrl
-                  ? <img
-                    src={siteConfig.avatarUrl}
-                    alt={siteConfig.name}
-                    style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'top center' }}
+          {/* Overlay gelap */}
+          <div className="ts-slide-overlay" />
+
+          {/* Konten di atas foto */}
+          <div className="ts-sidebar-content">
+
+            {/* Top: dots + panah navigasi */}
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+              {/* Dots */}
+              <div style={{ display: 'flex', gap: '6px', alignItems: 'center' }}>
+                {SLIDE_PHOTOS.map((_, i) => (
+                  <button
+                    key={i}
+                    className="ts-dot-btn"
+                    onClick={() => goTo(i)}
+                    aria-label={`Foto ${i + 1}`}
+                    style={{
+                      width: i === slideIdx ? '20px' : '6px',
+                      height: '6px',
+                      borderRadius: i === slideIdx ? '3px' : '50%',
+                      background: i === slideIdx ? '#fff' : 'rgba(255,255,255,0.35)',
+                    }}
                   />
-                  : <div style={{
-                    width: '100%',
-                    height: '100%',
-                    backgroundColor: '#1a1a1a',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                  }}>
-                    <span style={{
-                      fontFamily: 'var(--font-display)',
-                      fontSize: '5rem',
-                      color: '#e8a8c0',
-                      lineHeight: 1,
-                      userSelect: 'none',
-                    }}>
-                      {siteConfig.name.charAt(0)}
-                    </span>
-                  </div>
-                }
+                ))}
               </div>
 
-              {/* Left accent stripe */}
-              <div style={{
-                position: 'absolute',
-                top: 0,
-                left: '-10px',
-                width: '4px',
-                height: '100%',
-                background: 'linear-gradient(to bottom, #c94f35, #6b1f3a)',
-              }} />
+              {/* Panah */}
+              <div style={{ display: 'flex', gap: '6px' }}>
+                <button
+                  className="ts-nav-arrow"
+                  onClick={() => goTo((slideIdx - 1 + SLIDE_PHOTOS.length) % SLIDE_PHOTOS.length)}
+                  aria-label="Foto sebelumnya"
+                >‹</button>
+                <button
+                  className="ts-nav-arrow"
+                  onClick={() => goTo((slideIdx + 1) % SLIDE_PHOTOS.length)}
+                  aria-label="Foto berikutnya"
+                >›</button>
+              </div>
             </div>
 
-            {/* Name */}
-            <p style={{
-              fontFamily: 'var(--font-display)',
-              fontSize: 'clamp(1.5rem, 2.4vw, 2rem)',
-              letterSpacing: '0.03em',
-              textTransform: 'uppercase',
-              color: '#1a1a1a',
-              lineHeight: 1,
-              marginBottom: '10px',
-            }}>{siteConfig.name}</p>
+            {/* Bottom: nama + quote */}
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
 
-            {/* Role row */}
-            <div className="ts-role-row" style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-              <div style={{ width: '20px', height: '2px', backgroundColor: '#c94f35', flexShrink: 0 }} />
-              <p style={{
-                fontFamily: 'var(--font-body)',
-                fontWeight: 700,
-                fontSize: '0.6rem',
-                letterSpacing: '0.18em',
-                textTransform: 'uppercase',
-                color: 'rgba(26,26,26,0.6)',
-              }}>{siteConfig.role}</p>
-            </div>
-          </div>
-          {/* ── Motto / Quote ── */}
-          <div style={{ position: 'relative', zIndex: 1 }}>
-            {/* Opening quotation mark */}
-            <div style={{
-              fontFamily: 'var(--font-display)',
-              fontSize: '3.5rem',
-              lineHeight: 0.6,
-              color: 'rgba(26,26,26,0.18)',
-              marginBottom: '10px',
-              userSelect: 'none',
-            }}>"</div>
-
-            <p style={{
-              fontFamily: 'var(--font-body)',
-              fontWeight: 500,
-              fontSize: '0.82rem',
-              lineHeight: 1.75,
-              color: 'rgba(26,26,26,0.72)',
-              fontStyle: 'italic',
-              marginBottom: '14px',
-            }}>
-              Grow at your own pace, stay grounded in faith, and let your impact do the talking.
-              Authenticity is the new standard.
-            </p>
-
-            {/* Attribution line */}
-            <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-              <div style={{ width: '16px', height: '1.5px', backgroundColor: '#c94f35' }} />
+              {/* Caption foto */}
               <span style={{
-                fontFamily: 'var(--font-body)',
-                fontWeight: 700,
-                fontSize: '0.58rem',
-                letterSpacing: '0.16em',
-                textTransform: 'uppercase',
-                color: 'rgba(26,26,26,0.45)',
-              }}>Moto Hidup</span>
+                fontSize: '9px', fontWeight: 700, letterSpacing: '0.12em',
+                textTransform: 'uppercase', color: 'rgba(255,255,255,0.4)',
+                textAlign: 'right',
+              }}>
+                {SLIDE_PHOTOS[slideIdx].caption} / {SLIDE_PHOTOS.length}
+              </span>
+
+              {/* Nama & role */}
+              <div>
+                <p style={{
+                  fontFamily: 'var(--font-display)',
+                  fontSize: 'clamp(1.8rem, 3vw, 2.4rem)',
+                  letterSpacing: '0.03em', textTransform: 'uppercase',
+                  color: '#fff', lineHeight: 0.92, marginBottom: '10px',
+                }}>
+                  {siteConfig.name.split(' ').map((w, i) => (
+                    <span key={i} style={{ display: 'block' }}>{w}</span>
+                  ))}
+                </p>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                  <div style={{ width: '18px', height: '2px', background: '#c94f35', flexShrink: 0 }} />
+                  <span style={{
+                    fontSize: '9px', fontWeight: 700, letterSpacing: '0.18em',
+                    textTransform: 'uppercase', color: 'rgba(255,255,255,0.6)',
+                  }}>{siteConfig.role}</span>
+                </div>
+              </div>
+
+              {/* Garis pembatas */}
+              <div style={{ height: '1px', background: 'rgba(255,255,255,0.15)' }} />
+
+              {/* Motto / Quote */}
+              <div>
+                <div style={{
+                  fontFamily: 'var(--font-display)', fontSize: '2.5rem',
+                  lineHeight: 0.6, color: 'rgba(255,255,255,0.15)',
+                  marginBottom: '8px', userSelect: 'none',
+                }}>"</div>
+
+                <p style={{
+                  fontFamily: 'var(--font-body)', fontWeight: 400,
+                  fontSize: '11px', lineHeight: 1.75,
+                  color: 'rgba(255,255,255,0.7)', fontStyle: 'italic',
+                  marginBottom: '10px',
+                }}>
+                  Grow at your own pace, stay grounded in faith, and let your impact do the talking.
+                  Authenticity is the new standard.
+                </p>
+
+                <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                  <div style={{ width: '14px', height: '1.5px', background: '#c94f35' }} />
+                  <span style={{
+                    fontSize: '8px', fontWeight: 700, letterSpacing: '0.18em',
+                    textTransform: 'uppercase', color: 'rgba(255,255,255,0.4)',
+                  }}>Moto Hidup</span>
+                </div>
+              </div>
             </div>
           </div>
         </aside>
@@ -339,7 +410,7 @@ export default function TentangSayaClient() {
             style={{ padding: 'clamp(24px,5vw,48px) clamp(20px,5vw,44px) 56px', maxWidth: '720px' }}
           >
 
-            {/* Name + title */}
+            {/* Nama + title */}
             <div style={{ marginBottom: '28px' }}>
               <h2
                 className="ts-name-text"
