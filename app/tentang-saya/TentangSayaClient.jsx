@@ -7,21 +7,21 @@ import { siteConfig } from '@/data/config'
    DATA — sesuaikan dengan profil Nafis
 ══════════════════════════════════════════ */
 const STATS = [
-  { value: '2+', label: 'Tahun Mengajar' },
-  { value: '3', label: 'Mata Pelajaran' },
-  { value: '40+', label: 'Siswa Bimbel' },
+  { value: '2023', label: 'Mulai Kuliah' },
+  { value: '2+', label: 'Tahun Belajar' },
+  { value: 'PAI', label: 'Program Studi' },
 ]
 
 const SKILLS = [
   { label: 'Pendidikan Agama Islam', pct: 90, color: '#c94f35' },
-  { label: 'Bahasa Arab', pct: 78, color: '#8a7d3a' },
-  { label: 'Metode Pembelajaran', pct: 82, color: '#6b1f3a' },
+  { label: 'Inovasi Pembelajaran', pct: 82, color: '#8a7d3a' },
+  { label: 'Literasi Digital', pct: 78, color: '#6b1f3a' },
   { label: 'Komunikasi & Dakwah', pct: 75, color: '#d4604a' },
 ]
 
 const INTERESTS = [
-  'Kurikulum PAI', 'Bahasa Arab', 'Pendidikan Islam',
-  'Literasi Digital', 'Pengabdian Masyarakat', 'Sejarah Islam',
+  'Inovasi Pembelajaran Islam', 'Literasi Digital', 'Pendidikan Agama Islam',
+  'Manajemen Pendidikan', 'Teknologi Pendidikan', 'Nilai Keagamaan',
 ]
 
 /* ══════════════════════════════════════════
@@ -322,10 +322,8 @@ export default function TentangSayaClient() {
               fontStyle: 'italic',
               marginBottom: '14px',
             }}>
-              {/*
-                Ganti dengan motto atau kutipan favorit Nafis.
-              */}
-              Ilmu yang bermanfaat adalah ilmu yang diamalkan untuk sesama.
+              Grow at your own pace, stay grounded in faith, and let your impact do the talking.
+              Authenticity is the new standard.
             </p>
 
             {/* Attribution line */}
@@ -381,21 +379,21 @@ export default function TentangSayaClient() {
             {/* Bio */}
             <div className="ts-bio-block">
               <p style={{ fontFamily: 'var(--font-body)', fontSize: '1rem', lineHeight: 1.9, color: '#3a3a3a', marginBottom: '18px' }}>
-                Saya adalah mahasiswa Program Studi Pendidikan Agama Islam di UIN Sunan Ampel
-                Surabaya, sekaligus aktif sebagai guru bimbingan belajar di Lembaga Bimbel
-                Al-Falah. Saya percaya bahwa ilmu yang bermanfaat adalah ilmu yang diamalkan
-                untuk kemaslahatan bersama.
+                Saya adalah mahasiswa Program Studi Pendidikan Agama Islam di Universitas Islam
+                Nahdlatul Ulama (UNISNU) Jepara yang menempuh studi sejak tahun 2023. Saya percaya
+                bahwa pendidikan adalah tentang adaptasi dan memberikan dampak nyata yang relevan
+                dengan perkembangan zaman yang serba cepat.
               </p>
               <p style={{ fontFamily: 'var(--font-body)', fontSize: '1rem', lineHeight: 1.9, color: '#3a3a3a', marginBottom: '18px' }}>
-                Fokus studi saya mencakup kurikulum PAI, metode pembelajaran Islam modern,
-                dan literasi keagamaan. Saya telah menjalani PPL di MAN 1 Surabaya serta
-                KKN di Desa Sidoarjo, di mana saya mengembangkan program bimbingan
-                Al-Qur&apos;an dan pelatihan literasi digital bagi masyarakat.
+                Fokus akademik saya berpusat pada inovasi pembelajaran Islam dan literasi digital,
+                dengan komitmen untuk mengemas nilai-nilai keagamaan melalui pendekatan yang modern.
               </p>
-              <p style={{ fontFamily: 'var(--font-body)', fontSize: '1rem', lineHeight: 1.9, color: '#3a3a3a' }}>
-                Sebelumnya, saya menyelesaikan pendidikan di MA Nurul Huda Surabaya dan
-                aktif di Himpunan Mahasiswa Jurusan PAI divisi akademik, terlibat dalam
-                seminar pendidikan Islam dan kajian keislaman rutin lintas angkatan.
+              <p style={{ fontFamily: 'var(--font-body)', fontSize: '1rem', lineHeight: 1.9, color: '#3a3a3a', marginBottom: '18px' }}>
+                Riwayat pendidikan saya dimulai dari MTs Hasyim Asy&apos;ari Bangsri (2016–2019),
+                dilanjutkan MA Hasyim Asy&apos;ari Bangsri (2019–2022), hingga kini menempuh S1 PAI
+                di UNISNU Jepara (2023–Sekarang). Pengalaman lapangan mencakup KKL di Universitas
+                Negeri Jakarta (Juni 2025) dan PPL/MdSM di MA Hasyim Asy&apos;ari Bangsri
+                (Februari–Maret 2026).
               </p>
             </div>
 
