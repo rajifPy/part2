@@ -8,8 +8,9 @@ export const siteConfig = {
   email: 'nama.anda[at]institusi.ac.id',
 
   links: {
-    orcid:    'https://orcid.org/0000-0000-0000-0000',
-    linkedin: 'https://linkedin.com/in/username',
+    instagram: 'https://instagram.com/',
+    linkedin:  'https://linkedin.com/in/',
+    youtube:   'https://youtube.com/',
   },
 
   nav: [
