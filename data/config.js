@@ -18,5 +18,6 @@ export const siteConfig = {
     { label: 'Tentang_Saya', href: '/tentang-saya' },
     { label: 'Pengalaman',   href: '/pengalaman'   },
     { label: 'Galeri',       href: '/galeri'       },
+    { label: 'Blog',         href: '/blog'          },
   ],
 }
