@@ -3,6 +3,7 @@
 import { useState, useEffect, useRef } from 'react'
 import { siteConfig } from '@/data/config'
 import CVDownloadButton from '@/components/ui/CVDownloadButton'
+import { TextReveal } from '@/hooks/useTextReveal'
 
 /* ══════════════════════════════════════════
    FOTO SLIDESHOW — tambahkan path foto kamu
