@@ -3,6 +3,7 @@
 import { useEffect, useState, useRef, useCallback } from 'react'
 import Link from 'next/link'
 import { siteConfig } from '@/data/config'
+import { MagneticWrapper } from '@/hooks/useMagnet'
 
 // ── Quote of the Day — koleksi kutipan islami ─────────────────
 const QUOTES = [
@@ -411,12 +412,16 @@ export default function HomePage() {
           {/* Bottom: CTA + social + quote */}
           <div style={{ position: 'relative', zIndex: 1 }}>
             <div className="home-ctas" style={{ display: 'flex', gap: '12px', flexWrap: 'wrap', marginBottom: '28px' }}>
+            <MagneticWrapper strength={0.4}>
               <Link href="/tentang-saya" className="home-btn-primary">
                 Tentang Saya →
               </Link>
+            </MagneticWrapper>
+            <MagneticWrapper strength={0.4}>
               <Link href="/pengalaman" className="home-btn-secondary">
                 Pengalaman
               </Link>
+            </MagneticWrapper>
             </div>
 
             <div className="home-social" style={{ display: 'flex', gap: '20px', flexWrap: 'wrap', marginBottom: '24px' }}>
