@@ -26,106 +26,6 @@ function adjustAlpha(hexOrRgb, alpha) {
 }
 
 /* ─────────────────────────────────────
-   CURSOR EFFECT — trailing dot + ring
-───────────────────────────────────── */
-function NavCursor() {
-  const dotRef  = useRef(null)
-  const ringRef = useRef(null)
-  const posRef  = useRef({ x: -100, y: -100 })
-  const dotPos  = useRef({ x: -100, y: -100 })
-  const rafRef  = useRef(null)
-  const [visible, setVisible] = useState(false)
-  const [clicking, setClicking] = useState(false)
-
-  useEffect(() => {
-    const header = document.querySelector('header')
-    if (!header) return
-
-    const onMove = (e) => {
-      posRef.current = { x: e.clientX, y: e.clientY }
-      if (!visible) setVisible(true)
-    }
-
-    const onLeave = () => setVisible(false)
-    const onDown  = () => setClicking(true)
-    const onUp    = () => setClicking(false)
-
-    header.addEventListener('mousemove', onMove)
-    header.addEventListener('mouseleave', onLeave)
-    header.addEventListener('mousedown', onDown)
-    window.addEventListener('mouseup', onUp)
-
-    /* rAF loop — dot lags behind, ring follows instantly */
-    const tick = () => {
-      const target = posRef.current
-      const cur    = dotPos.current
-
-      /* lerp dot */
-      dotPos.current = {
-        x: cur.x + (target.x - cur.x) * 0.12,
-        y: cur.y + (target.y - cur.y) * 0.12,
-      }
-
-      if (dotRef.current) {
-        dotRef.current.style.transform =
-          `translate(${dotPos.current.x}px, ${dotPos.current.y}px) translate(-50%, -50%)`
-      }
-      if (ringRef.current) {
-        ringRef.current.style.transform =
-          `translate(${target.x}px, ${target.y}px) translate(-50%, -50%)`
-      }
-
-      rafRef.current = requestAnimationFrame(tick)
-    }
-    rafRef.current = requestAnimationFrame(tick)
-
-    return () => {
-      header.removeEventListener('mousemove', onMove)
-      header.removeEventListener('mouseleave', onLeave)
-      header.removeEventListener('mousedown', onDown)
-      window.removeEventListener('mouseup', onUp)
-      cancelAnimationFrame(rafRef.current)
-    }
-  }, [visible])
-
-  return (
-    <>
-      {/* Outer ring — snappy */}
-      <div ref={ringRef} style={{
-        position:      'fixed',
-        top:           0,
-        left:          0,
-        width:         clicking ? '28px' : '36px',
-        height:        clicking ? '28px' : '36px',
-        border:        '1.5px solid rgba(240,238,234,0.55)',
-        borderRadius:  '50%',
-        pointerEvents: 'none',
-        zIndex:        9999,
-        opacity:       visible ? 1 : 0,
-        transition:    'width 0.15s ease, height 0.15s ease, opacity 0.25s ease',
-        mixBlendMode:  'difference',
-      }} />
-
-      {/* Inner dot — trails behind */}
-      <div ref={dotRef} style={{
-        position:        'fixed',
-        top:             0,
-        left:            0,
-        width:           clicking ? '6px' : '5px',
-        height:          clicking ? '6px' : '5px',
-        background:      '#f0eeea',
-        borderRadius:    '50%',
-        pointerEvents:   'none',
-        zIndex:          9999,
-        opacity:         visible ? 1 : 0,
-        transition:      'width 0.12s ease, height 0.12s ease, opacity 0.25s ease',
-        mixBlendMode:    'difference',
-      }} />
-    </>
-  )
-}
-
-/* ─────────────────────────────────────
    HOVER SPOTLIGHT — per-tab glow strip
 ───────────────────────────────────── */
 function TabSpotlight({ color }) {
@@ -153,7 +53,6 @@ function TabSpotlight({ color }) {
         pointerEvents: 'all',
       }}
     >
-      {/* Radial spotlight that tracks horizontal position */}
       <div style={{
         position:   'absolute',
         inset:      0,
@@ -204,6 +103,109 @@ function useRipple() {
 }
 
 /* ─────────────────────────────────────
+   GLITCH TEXT — efek glitch saat hover
+───────────────────────────────────── */
+function GlitchLabel({ label, isActive, textColor }) {
+  const [glitching, setGlitching] = useState(false)
+  const timerRef = useRef(null)
+
+  const CHARS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789@#$%&'
+  const [displayText, setDisplayText] = useState(label)
+  const iterRef = useRef(0)
+
+  const startGlitch = useCallback(() => {
+    if (glitching) return
+    setGlitching(true)
+    iterRef.current = 0
+    const originalChars = label.toUpperCase().split('')
+    const totalIter = originalChars.length * 3  // iterasi total
+
+    const tick = () => {
+      iterRef.current++
+      const progress = iterRef.current / totalIter
+
+      const next = originalChars.map((ch, i) => {
+        if (ch === ' ') return ' '
+        // karakter terkunci dari kiri secara bertahap
+        if (i < Math.floor(progress * originalChars.length)) return ch
+        return CHARS[Math.floor(Math.random() * CHARS.length)]
+      }).join('')
+
+      setDisplayText(next)
+
+      if (iterRef.current < totalIter) {
+        timerRef.current = setTimeout(tick, 38)
+      } else {
+        setDisplayText(label.toUpperCase())
+        setGlitching(false)
+      }
+    }
+
+    timerRef.current = setTimeout(tick, 0)
+  }, [label, glitching])
+
+  const stopGlitch = useCallback(() => {
+    clearTimeout(timerRef.current)
+    setDisplayText(label.toUpperCase())
+    setGlitching(false)
+  }, [label])
+
+  useEffect(() => () => clearTimeout(timerRef.current), [])
+
+  return (
+    <span
+      onMouseEnter={startGlitch}
+      onMouseLeave={stopGlitch}
+      style={{
+        position:      'relative',
+        zIndex:        1,
+        fontFamily:    'var(--font-body)',
+        fontWeight:    700,
+        fontSize:      'var(--text-sm)',
+        letterSpacing: glitching ? '0.18em' : '0.12em',
+        color:         isActive ? textColor : adjustAlpha(textColor, 0.55),
+        transition:    'letter-spacing 0.1s ease, color 0.15s ease',
+        display:       'inline-block',
+        minWidth:      '4ch',   // cegah layout shift saat karakter random lebih lebar
+      }}
+    >
+      {/* Layer glitch merah — sedikit geser ke kanan */}
+      {glitching && (
+        <span aria-hidden="true" style={{
+          position:    'absolute',
+          inset:       0,
+          color:       'rgba(255,60,60,0.55)',
+          transform:   'translateX(2px)',
+          pointerEvents: 'none',
+          letterSpacing: '0.18em',
+          userSelect:  'none',
+        }}>
+          {displayText}
+        </span>
+      )}
+
+      {/* Layer glitch cyan — sedikit geser ke kiri */}
+      {glitching && (
+        <span aria-hidden="true" style={{
+          position:    'absolute',
+          inset:       0,
+          color:       'rgba(0,220,220,0.45)',
+          transform:   'translateX(-2px)',
+          pointerEvents: 'none',
+          letterSpacing: '0.18em',
+          userSelect:  'none',
+        }}>
+          {displayText}
+        </span>
+      )}
+
+      {/* Teks utama */}
+      <span style={{ position: 'relative' }}>{displayText}</span>
+    </span>
+  )
+}
+
+/* ─────────────────────────────────────
    MAIN NAVBAR
 ───────────────────────────────────── */
 export default function Navbar() {
@@ -237,30 +239,20 @@ export default function Navbar() {
           overflow: hidden;
         }
 
-        /* Hide default system cursor inside header */
-        header { cursor: none; }
-        header a, header button { cursor: none; }
-
         .nav-hamburger { display: none !important; }
 
         @media (max-width: 600px) {
           .nav-hamburger { display: flex !important; }
           .nav-tabs      { display: none !important; }
-          /* Restore cursor on mobile (no mouse) */
-          header, header a, header button { cursor: auto; }
         }
         @media (min-width: 601px) {
           .nav-mobile { display: none !important; }
         }
 
-        /* Reduce motion */
         @media (prefers-reduced-motion: reduce) {
           .nav-tab-link span[style*="animation"] { animation: none !important; }
         }
       `}</style>
-
-      {/* Custom cursor — desktop only */}
-      <NavCursor />
 
       <header style={{ position: 'sticky', top: 0, zIndex: 100 }}>
         {/* Top bar */}
@@ -383,8 +375,7 @@ export default function Navbar() {
 }
 
 /* ─────────────────────────────────────
-   SINGLE TAB — isolated so each tab
-   can have its own ripple state
+   SINGLE TAB — isolated ripple + glitch
 ───────────────────────────────────── */
 function NavTabLink({ href, label, isActive, bg, textColor, onPlay }) {
   const { addRipple, RippleContainer } = useRipple()
@@ -404,14 +395,8 @@ function NavTabLink({ href, label, isActive, bg, textColor, onPlay }) {
         textAlign:       'center',
         padding:         '14px 6px',
         backgroundColor: bg,
-        color:           isActive ? textColor : adjustAlpha(textColor, 0.55),
-        fontFamily:      'var(--font-body)',
-        fontWeight:      700,
-        fontSize:        'var(--text-sm)',
-        letterSpacing:   '0.12em',
-        textTransform:   'uppercase',
         borderBottom:    isActive ? '4px solid rgba(0,0,0,0.25)' : '4px solid transparent',
-        transition:      'filter 0.15s ease, color 0.15s ease',
+        transition:      'filter 0.15s ease',
         whiteSpace:      'nowrap',
         display:         'flex',
         alignItems:      'center',
@@ -426,8 +411,8 @@ function NavTabLink({ href, label, isActive, bg, textColor, onPlay }) {
       {/* Ripples */}
       <RippleContainer color={bg} />
 
-      {/* Label stays on top */}
-      <span style={{ position: 'relative', zIndex: 1 }}>{label}</span>
+      {/* Glitch label */}
+      <GlitchLabel label={label} isActive={isActive} textColor={textColor} />
     </Link>
   )
 }
