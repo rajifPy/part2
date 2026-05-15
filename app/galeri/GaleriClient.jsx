@@ -8,11 +8,11 @@ import { useState } from 'react'
  */
 const galeriItems = [
   {
-    id:       'foto-1',
+    id:       'Seminar Kolabarosi UNJ & UNISNU',
     year:     '2025',
     category: 'Konferensi',
-    caption:  'Presentasi di Nama Konferensi, Kota',
-    src:      '/image/sementara.jpg',
+    caption:  'Seminar Kolaborasi di Universitas Negeri Jakarta, Kota Jakarta',
+    src:      '/image/r Seminar Kolaborasi UNJ dan Unisnu.jpg',
   },
   {
     id:       'foto-2',
