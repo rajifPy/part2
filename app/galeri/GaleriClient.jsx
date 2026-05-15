@@ -12,7 +12,7 @@ const galeriItems = [
     year:     '2025',
     category: 'Konferensi',
     caption:  'Seminar Kolaborasi di Universitas Negeri Jakarta, Kota Jakarta',
-    src:      '/image/r Seminar Kolaborasi UNJ dan Unisnu .jpg',
+    src:      '/image/galeri1.jpg',
   },
   {
     id:       'foto-2',
