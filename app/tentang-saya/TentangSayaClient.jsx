@@ -109,6 +109,19 @@ export default function TentangSayaClient() {
   const [slideIdx, setSlideIdx] = useState(0)
   const timerRef = useRef(null)
 
+  // Teks bio untuk efek reveal berurutan
+  const bioText1 = `Saya adalah mahasiswa Program Studi Pendidikan Agama Islam di Universitas Islam
+Nahdlatul Ulama (UNISNU) Jepara yang menempuh studi sejak tahun 2023. Saya percaya
+bahwa pendidikan adalah tentang adaptasi dan memberikan dampak nyata yang relevan
+dengan perkembangan zaman yang serba cepat`
+
+  const bioText2 = `Fokus akademik saya berpusat pada inovasi pembelajaran Islam dan literasi digital,
+dengan komitmen untuk mengemas nilai-nilai keagamaan melalui pendekatan yang modern.`
+
+  // Hitung jumlah kata paragraf pertama untuk delay paragraf kedua
+  const wordCount1 = bioText1.split(/\s+/).filter(Boolean).length
+  const secondParaDelay = wordCount1 * 55   // stagger pertama = 55ms
+
   const goTo = (n) => {
     setSlideIdx(n)
     clearInterval(timerRef.current)
@@ -492,26 +505,36 @@ export default function TentangSayaClient() {
               {STATS.map((s, i) => <StatCard key={s.label} {...s} index={i} mounted={mounted} />)}
             </div>
 
-            {/* Bio */}
+            {/* Bio dengan efek reveal berurutan dan rata kanan-kiri */}
             <div className="ts-bio-block">
-               <TextReveal
-               text="Saya adalah mahasiswa Program Studi Pendidikan Agama Islam di Universitas Islam
-                Nahdlatul Ulama (UNISNU) Jepara yang menempuh studi sejak tahun 2023. Saya percaya
-                bahwa pendidikan adalah tentang adaptasi dan memberikan dampak nyata yang relevan
-                dengan perkembangan zaman yang serba cepat"
-               tag="p"
-               stagger={55}
-               delay={0}
-               style={{ fontFamily: 'var(--font-body)', fontSize: '1rem', lineHeight: 1.9, color: '#3a3a3a', marginBottom: '18px', textAlign: 'justify'}}
-               />
-               <TextReveal
-               text="Fokus akademik saya berpusat pada inovasi pembelajaran Islam dan literasi digital,
-                dengan komitmen untuk mengemas nilai-nilai keagamaan melalui pendekatan yang modern."
-               tag="p"
-               stagger={65}
-               delay={100}
-               style={{ fontFamily: 'var(--font-body)', fontSize: '1rem', lineHeight: 1.9, color: '#3a3a3a', marginBottom: '18px', textAlign: 'justify'}}
-               />
+              <TextReveal
+                text={bioText1}
+                tag="p"
+                stagger={55}
+                delay={0}
+                style={{
+                  fontFamily: 'var(--font-body)',
+                  fontSize: '1rem',
+                  lineHeight: 1.9,
+                  color: '#3a3a3a',
+                  marginBottom: '18px',
+                  textAlign: 'justify'
+                }}
+              />
+              <TextReveal
+                text={bioText2}
+                tag="p"
+                stagger={55}
+                delay={secondParaDelay}
+                style={{
+                  fontFamily: 'var(--font-body)',
+                  fontSize: '1rem',
+                  lineHeight: 1.9,
+                  color: '#3a3a3a',
+                  marginBottom: '18px',
+                  textAlign: 'justify'
+                }}
+              />
             </div>
 
             <div className="ts-divider" />
