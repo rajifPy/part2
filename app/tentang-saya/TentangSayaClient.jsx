@@ -8,9 +8,9 @@ import CVDownloadButton from '@/components/ui/CVDownloadButton'
    FOTO SLIDESHOW — tambahkan path foto kamu
 ══════════════════════════════════════════ */
 const SLIDE_PHOTOS = [
-  { src: '/image/nafis.png',  caption: 'Foto 1' },
-  { src: '/image/profile2.jpg', caption: 'Foto 2' },
-  { src: '/image/profile3.jpg', caption: 'Foto 3' },
+  { src: '/image/nafis.png'},
+  { src: '/image/nafisprofile2.png'},
+  { src: '/image/nafisprofile3.png'},
 ]
 
 /* ══════════════════════════════════════════
