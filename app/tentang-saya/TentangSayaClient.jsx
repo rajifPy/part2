@@ -508,8 +508,8 @@ export default function TentangSayaClient() {
                text="Fokus akademik saya berpusat pada inovasi pembelajaran Islam dan literasi digital,
                 dengan komitmen untuk mengemas nilai-nilai keagamaan melalui pendekatan yang modern."
                tag="p"
-               stagger={55}
-               delay={0}
+               stagger={65}
+               delay={100}
                style={{ fontFamily: 'var(--font-body)', fontSize: '1rem', lineHeight: 1.9, color: '#3a3a3a', marginBottom: '18px', textAlign: 'justify'}}
                />
             </div>
