@@ -15,11 +15,11 @@ const galeriItems = [
     src:      '/image/galeri1.jpg',
   },
   {
-    id:       'foto-2',
+    id:       'Diseminasi MdsM',
     year:     '2025',
     category: 'Pengajaran',
-    caption:  'Sesi kelas mata kuliah [Judul Mata Kuliah]',
-    src:      '/image/sementara.jpg',
+    caption:  'Sesi kelas mata kuliah [Judul Mata Kuliah',
+    src:      '/image/galeri2.JPG',
   },
   {
     id:       'foto-3',
