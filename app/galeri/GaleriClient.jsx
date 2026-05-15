@@ -24,7 +24,7 @@ const galeriItems = [
   {
     id:       'Fotbar Penyerahan Praktik Mengajar MAHABA',
     year:     '2024',
-    category: 'Fieldwork',
+    category: 'Pengajaran',
     caption:  'Penelitian arsip di [Nama Kota]',
     src:      '/image/galeri3.JPG',
   },
