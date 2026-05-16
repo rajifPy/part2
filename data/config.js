@@ -1,5 +1,5 @@
 export const siteConfig = {
-  name:        'Zumrotun Nafisah',
+  name:        'Fisa',
   avatarUrl:   '/image/nafis.jpeg',
   title:       'Pendidikan Agama Islam',
   description: 'Mahasiswi Kupu-Kupu',
