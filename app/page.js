@@ -22,37 +22,6 @@ function getDailyQuote() {
   return QUOTES[day % QUOTES.length]
 }
 
-// ── Golden Name — tiap kata punya ref sendiri ─────────────────
-function GoldenNameWord({ word, glow }) {
-  // Interpolasi warna: putih (#f0eeea) → emas cerah (#FFD700)
-  // dan tambahkan text-shadow shimmer
-  const r = Math.round(240 + (255 - 240) * glow)
-  const g = Math.round(238 + (215 - 238) * glow)   // turun ke 215
-  const b = Math.round(234 + (0   - 234) * glow)   // turun ke 0
-  const color = `rgb(${r},${g},${b})`
-
-  // shadow emas berlapis — semakin dekat semakin terang
-  const shadowAlpha1 = (glow * 0.9).toFixed(3)
-  const shadowAlpha2 = (glow * 0.5).toFixed(3)
-  const shadowAlpha3 = (glow * 0.25).toFixed(3)
-  const textShadow = glow > 0.05
-    ? `0 0 ${20 + glow*40}px rgba(255,200,0,${shadowAlpha1}),
-       0 0 ${40 + glow*80}px rgba(255,160,0,${shadowAlpha2}),
-       0 0 ${80 + glow*120}px rgba(255,120,0,${shadowAlpha3})`
-    : 'none'
-
-  return (
-    <span style={{
-      display: 'block',
-      color,
-      textShadow,
-      transition: 'color 0.15s ease, text-shadow 0.15s ease',
-    }}>
-      {word}
-    </span>
-  )
-}
-
 export default function HomePage() {
   const [mounted, setMounted] = useState(false)
   const [quote]   = useState(getDailyQuote)
@@ -86,10 +55,24 @@ export default function HomePage() {
   const px = (depth = 1) => `translateX(${mouse.x * depth * 14}px) translateY(${mouse.y * depth * 10}px)`
 
   // ── Butterfly glow untuk nama ─────────────────────────────
-  // radius 320px — kupu-kupu mulai menyentuh efek dari jarak segini
-  const [nameRef, glow] = useButterflyGlow({ radius: 320 })
+  const [nameRef, { glow, relX, relY }] = useButterflyGlow({ radius: 340 })
 
-  const nameWords = siteConfig.name.split(' ')
+  // Hitung warna gradient berdasarkan posisi kupu-kupu
+  // Saat glow = 0: teks putih biasa
+  // Saat glow = 1: gradient emas cerah yang titik terangnya mengikuti relX
+  const goldStop1 = `rgba(255,215,0,${(glow * 0.95).toFixed(3)})`
+  const goldStop2 = `rgba(255,160,0,${(glow * 0.7).toFixed(3)})`
+  const goldStop3 = `rgba(255,235,100,${(glow * 0.9).toFixed(3)})`
+
+  // gradient radial dari posisi kupu-kupu → menyinari seluruh teks sekaligus
+  const nameBackground = glow > 0.02
+    ? `radial-gradient(ellipse 80% 120% at ${(relX * 100).toFixed(1)}% ${(relY * 100).toFixed(1)}%, ${goldStop3} 0%, ${goldStop1} 30%, ${goldStop2} 55%, rgba(240,238,234,0.9) 100%)`
+    : 'none'
+
+  // text-shadow emas saat mendekati
+  const nameShadow = glow > 0.05
+    ? `0 0 ${20 + glow * 60}px rgba(255,200,0,${(glow * 0.8).toFixed(3)}), 0 0 ${50 + glow * 100}px rgba(255,140,0,${(glow * 0.4).toFixed(3)})`
+    : 'none'
 
   return (
     <>
@@ -101,18 +84,12 @@ export default function HomePage() {
             linear-gradient(90deg, rgba(240,238,234,0.06) 1px, transparent 1px);
           background-size:48px 48px; pointer-events:none;
         }
-        @keyframes slideUp   { from{opacity:0;transform:translateY(24px)} to{opacity:1;transform:translateY(0)} }
-        @keyframes slideRight{ from{opacity:0;transform:translateX(-20px)} to{opacity:1;transform:translateX(0)} }
-        @keyframes fadeIn    { from{opacity:0} to{opacity:1} }
+        @keyframes slideUp    { from{opacity:0;transform:translateY(24px)} to{opacity:1;transform:translateY(0)} }
+        @keyframes slideRight { from{opacity:0;transform:translateX(-20px)} to{opacity:1;transform:translateX(0)} }
+        @keyframes fadeIn     { from{opacity:0} to{opacity:1} }
         @keyframes quoteReveal { from{opacity:0;transform:translateY(10px) scaleY(0.96)} to{opacity:1;transform:translateY(0) scaleY(1)} }
         @keyframes arabicFloat { 0%,100%{transform:translateY(0px)} 50%{transform:translateY(-4px)} }
         @keyframes shimmer { 0%{background-position:-200% center} 100%{background-position:200% center} }
-
-        /* ── Efek shimmer emas pada nama saat glow tinggi ── */
-        @keyframes goldShimmer {
-          0%   { background-position: -200% center; }
-          100% { background-position:  200% center; }
-        }
 
         .home-role    { animation:slideRight .6s ease .15s both }
         .home-name    { animation:slideUp    .7s ease .25s both }
@@ -122,6 +99,25 @@ export default function HomePage() {
         .home-meta    { animation:fadeIn     .7s ease .8s  both }
         .home-index   { animation:fadeIn     .8s ease .9s  both }
         .home-quote   { animation:quoteReveal .8s ease 1.0s both }
+
+        /* ── Nama dengan efek glow smooth ── */
+        .home-name-text {
+          font-family: var(--font-display);
+          font-size: clamp(4rem, 9vw, 8.5rem);
+          line-height: .85;
+          letter-spacing: .01em;
+          text-transform: uppercase;
+          margin-bottom: 28px;
+          /* Default: teks putih */
+          color: #f0eeea;
+          /* Background gradient diaplikasikan via inline style */
+          -webkit-background-clip: text;
+          background-clip: text;
+          /* transition smooth untuk semua perubahan */
+          transition: color 0.25s ease, text-shadow 0.25s ease, -webkit-text-fill-color 0.25s ease;
+          will-change: color, text-shadow;
+          display: block;
+        }
 
         .home-btn-primary {
           display:inline-flex; align-items:center; gap:10px;
@@ -232,30 +228,34 @@ export default function HomePage() {
             </p>
           </div>
 
-          {/* ── NAMA dengan efek emas ── */}
+          {/* ── NAMA dengan efek emas smooth ── */}
           <div style={{ position:'relative', zIndex:1, margin:'auto 0' }}>
             <h1
               ref={nameRef}
               className="home-name-text home-name parallax-layer"
               style={{
-                fontFamily: 'var(--font-display)',
-                fontSize:   'clamp(4rem, 9vw, 8.5rem)',
-                lineHeight: .85,
-                letterSpacing: '.01em',
-                textTransform: 'uppercase',
-                marginBottom: '28px',
                 transform: px(1.2),
-                // filter blur tipis saat glow tinggi — kesan cahaya
-                filter: glow > 0.1 ? `blur(${glow * 0.4}px)` : 'none',
-                transition: 'filter 0.2s ease',
+                // Saat glow aktif: gunakan background-clip untuk gradient emas
+                // Saat tidak aktif: warna putih biasa
+                backgroundImage: nameBackground,
+                WebkitTextFillColor: glow > 0.02 ? 'transparent' : '#f0eeea',
+                color: glow > 0.02 ? 'transparent' : '#f0eeea',
+                textShadow: nameShadow,
               }}
             >
-              {nameWords.map((w, i) => (
-                <GoldenNameWord key={i} word={w} glow={glow} />
-              ))}
+              {siteConfig.name}
             </h1>
 
-            <div className="home-divider" style={{ width:'48px', height:'3px', backgroundColor: glow > 0.15 ? `rgba(255,${Math.round(180+glow*75)},0,1)` : '#c94f35', marginBottom:'20px', transition:'background-color 0.2s', boxShadow: glow > 0.15 ? `0 0 ${glow*20}px rgba(255,180,0,0.8)` : 'none' }} />
+            <div
+              className="home-divider"
+              style={{
+                width:'48px', height:'3px',
+                backgroundColor: glow > 0.15 ? `rgba(255,${Math.round(180+glow*75)},0,1)` : '#c94f35',
+                marginBottom:'20px',
+                transition:'background-color 0.2s, box-shadow 0.2s',
+                boxShadow: glow > 0.15 ? `0 0 ${glow*20}px rgba(255,180,0,0.8)` : 'none',
+              }}
+            />
 
             <p className="home-tagline parallax-layer" style={{ fontFamily:'var(--font-body)', fontWeight:400, fontSize:'clamp(.85rem,1.4vw,1rem)', lineHeight:1.75, color:'rgba(240,238,234,.6)', maxWidth:'340px', transform:px(0.6) }}>
               Mahasiswa Pendidikan Agama Islam yang aktif dalam dunia pengajaran,
