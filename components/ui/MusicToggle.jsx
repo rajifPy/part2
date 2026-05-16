@@ -2,13 +2,7 @@
 
 import { useState, useRef, useCallback, useEffect } from 'react'
 
-/**
- * MusicToggle
- * Tombol play/pause musik background.
- * Letakkan file musik di /public/music/bgm.mp3
- * Ganti MUSIC_SRC di bawah jika nama file berbeda.
- */
-const MUSIC_SRC = '/music/bgm.mp3'
+const MUSIC_SRC = '/music/opick.mp3'
 
 export default function MusicToggle() {
   const audioRef   = useRef(null)
