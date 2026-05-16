@@ -6,7 +6,6 @@ import { siteConfig } from '@/data/config'
 import { MagneticWrapper } from '@/hooks/useMagnet'
 import { useButterflyGlow } from '@/hooks/useButterflyGlow'
 import MusicToggle from '@/components/ui/MusicToggle'
-import MusicToggle from '@/components/ui/MusicToggle'
 
 // ── Quote of the Day ──────────────────────────────────────────
 const QUOTES = [
