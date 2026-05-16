@@ -5,6 +5,8 @@ import Link from 'next/link'
 import { siteConfig } from '@/data/config'
 import { MagneticWrapper } from '@/hooks/useMagnet'
 import { useButterflyGlow } from '@/hooks/useButterflyGlow'
+import MusicToggle from '@/components/ui/MusicToggle'
+import MusicToggle from '@/components/ui/MusicToggle'
 
 // ── Quote of the Day ──────────────────────────────────────────
 const QUOTES = [
@@ -264,13 +266,14 @@ export default function HomePage() {
           </div>
 
           <div style={{ position:'relative', zIndex:1 }}>
-            <div className="home-ctas" style={{ display:'flex', gap:'12px', flexWrap:'wrap', marginBottom:'28px' }}>
+            <div className="home-ctas" style={{ display:'flex', gap:'12px', flexWrap:'wrap', marginBottom:'28px', alignItems:'center' }}>
               <MagneticWrapper strength={0.4}>
                 <Link href="/tentang-saya" className="home-btn-primary">Tentang Saya →</Link>
               </MagneticWrapper>
               <MagneticWrapper strength={0.4}>
                 <Link href="/pengalaman" className="home-btn-secondary">Pengalaman</Link>
               </MagneticWrapper>
+              <MusicToggle />
             </div>
 
             <div className="home-social" style={{ display:'flex', gap:'20px', flexWrap:'wrap', marginBottom:'24px' }}>
