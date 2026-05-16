@@ -2,6 +2,12 @@
 
 import { useEffect, useRef } from 'react'
 
+/**
+ * ButterflyFollower
+ * Custom cursor — kupu-kupu mengikuti mouse dengan ekor partikel emas.
+ * - Ukuran kecil (SCALE 0.38 dari koordinat asli)
+ * - Otomatis fade-out saat LoadingScreen (.kl-loading) aktif di DOM
+ */
 export default function ButterflyFollower() {
   const containerRef = useRef(null)
   const rafRef       = useRef(null)
@@ -16,24 +22,25 @@ export default function ButterflyFollower() {
     lastSpawnIdle: 0,
     prevNow: 0,
     W: 0, H: 0,
+    opacity: 0,
+    targetOpacity: 0,
   })
 
   useEffect(() => {
     if (typeof window === 'undefined') return
-
     const container = containerRef.current
     if (!container) return
 
-    // ── Canvas refs ────────────────────────────────────────────
-    const bgC = container.querySelector('#bf-bg')
-    const pC  = container.querySelector('#bf-particle')
-    const bC  = container.querySelector('#bf-butterfly')
-    const bgX = bgC.getContext('2d')
-    const pX  = pC.getContext('2d')
-    const bX  = bC.getContext('2d')
+    const pC = container.querySelector('#bf-particle')
+    const bC = container.querySelector('#bf-butterfly')
+    const pX = pC.getContext('2d')
+    const bX = bC.getContext('2d')
+
+    // Skala kupu-kupu: 0.38 → sayap ~53px lebar total
+    const SCALE = 0.38
 
     // ── Particle pool ──────────────────────────────────────────
-    const POOL_SIZE = 300
+    const POOL_SIZE = 200
     const COLORS = [
       'rgba(255,200,40,',
       'rgba(255,175,0,',
@@ -55,20 +62,19 @@ export default function ButterflyFollower() {
       const p = getParticle()
       if (!p) return
       const a = Math.random() * Math.PI * 2
-      const s = 0.3 + Math.random() * Math.max(speed, 0.5)
+      const s = 0.2 + Math.random() * Math.max(speed, 0.4)
       p.active = true
-      p.x      = bx + (Math.random() - 0.5) * 24
-      p.y      = by + (Math.random() - 0.5) * 24
+      p.x      = bx + (Math.random() - 0.5) * 10
+      p.y      = by + (Math.random() - 0.5) * 10
       p.vx     = Math.cos(a) * s
       p.vy     = Math.sin(a) * s
       p.life   = 1
-      p.decay  = 0.016 + Math.random() * 0.022
-      p.r      = 0.8 + Math.random() * 1.8
+      p.decay  = 0.020 + Math.random() * 0.028
+      p.r      = 0.5 + Math.random() * 1.2
       p.ci     = Math.floor(Math.random() * COLORS.length)
       p.tw     = Math.random() * Math.PI * 2
     }
 
-    // ── Helpers ────────────────────────────────────────────────
     function lerp(a, b, t) { return a + (b - a) * t }
     function angleLerp(a, b, t) {
       let d = b - a
@@ -77,19 +83,7 @@ export default function ButterflyFollower() {
       return a + d * t
     }
 
-    // ── Background (drawn once on resize) ──────────────────────
-    function drawBg() {
-      const { W, H } = stateRef.current
-      bgX.clearRect(0, 0, W, H)
-
-      const grd = bgX.createRadialGradient(W / 2, H / 2, 0, W / 2, H / 2, Math.max(W, H) * 0.5)
-      grd.addColorStop(0, 'rgba(10,30,100,0.08)')
-      grd.addColorStop(1, 'rgba(0,0,0,0)')
-      bgX.fillStyle = grd
-      bgX.fillRect(0, 0, W, H)
-    }
-
-    // ── Wing shape (pivots at body edge, x ≥ 0) ────────────────
+    // ── Wing path — koordinat asli (akan di-scale via ctx.scale) ──
     function drawWingPath(ctx) {
       ctx.beginPath()
       ctx.moveTo(0, -2)
@@ -101,34 +95,30 @@ export default function ButterflyFollower() {
       ctx.closePath()
     }
 
-    // ── Butterfly draw ─────────────────────────────────────────
     function drawButterfly(ctx, spread, bob) {
-      const sc = 0.95
       ctx.save()
       ctx.translate(0, bob)
 
       function drawOneSide(side) {
         ctx.save()
-        ctx.scale(side * spread * sc, sc)
+        ctx.scale(side * spread, 1)
 
         drawWingPath(ctx)
         const wg = ctx.createLinearGradient(5, 0, 90, 0)
-        wg.addColorStop(0, '#cbbde8')
+        wg.addColorStop(0,    '#cbbde8')
         wg.addColorStop(0.35, '#9080c8')
         wg.addColorStop(0.65, '#6254a0')
-        wg.addColorStop(1, '#3e3272')
+        wg.addColorStop(1,    '#3e3272')
         ctx.fillStyle = wg
         ctx.fill()
-        ctx.strokeStyle = 'rgba(100,80,180,0.35)'
-        ctx.lineWidth = 0.8
+        ctx.strokeStyle = 'rgba(100,80,180,0.3)'
+        ctx.lineWidth = 1.5
         ctx.stroke()
 
-        // clip decorations inside wing
         ctx.save()
         drawWingPath(ctx)
         ctx.clip()
 
-        // gold tip upper
         const pg1 = ctx.createLinearGradient(55, -30, 75, 10)
         pg1.addColorStop(0, 'rgba(255,180,40,0.55)')
         pg1.addColorStop(1, 'rgba(255,120,0,0.0)')
@@ -137,7 +127,6 @@ export default function ButterflyFollower() {
         ctx.ellipse(68, -28, 20, 18, Math.PI * 0.15, 0, Math.PI * 2)
         ctx.fill()
 
-        // gold tip lower
         const pg2 = ctx.createLinearGradient(25, 55, 15, 75)
         pg2.addColorStop(0, 'rgba(255,160,20,0.5)')
         pg2.addColorStop(1, 'rgba(255,100,0,0.0)')
@@ -146,14 +135,12 @@ export default function ButterflyFollower() {
         ctx.ellipse(20, 65, 14, 12, -Math.PI * 0.1, 0, Math.PI * 2)
         ctx.fill()
 
-        // veins
         ctx.strokeStyle = 'rgba(220,205,255,0.13)'
-        ctx.lineWidth = 0.7
+        ctx.lineWidth = 1.0
         ;[[0,-2,30,-35],[0,-2,55,-15],[0,-2,45,25],[0,-2,18,55]].forEach(([x1,y1,x2,y2]) => {
           ctx.beginPath(); ctx.moveTo(x1,y1); ctx.lineTo(x2,y2); ctx.stroke()
         })
 
-        // eye spot
         ctx.beginPath(); ctx.arc(50, -18, 8, 0, Math.PI * 2)
         ctx.fillStyle = 'rgba(200,160,0,0.65)'; ctx.fill()
         ctx.beginPath(); ctx.arc(50, -18, 5, 0, Math.PI * 2)
@@ -161,32 +148,28 @@ export default function ButterflyFollower() {
         ctx.beginPath(); ctx.arc(48, -20, 1.5, 0, Math.PI * 2)
         ctx.fillStyle = 'rgba(255,255,255,0.8)'; ctx.fill()
 
-        ctx.restore() // clip
-        ctx.restore() // side scale
+        ctx.restore()
+        ctx.restore()
       }
 
       drawOneSide(1)
       drawOneSide(-1)
 
-      // abdomen segments
       for (let i = 0; i < 6; i++) {
         const sy = i * 6 - 10
         const sw = 5 - i * 0.5
         ctx.beginPath()
         ctx.ellipse(0, sy, sw, 3.2, 0, 0, Math.PI * 2)
-        ctx.fillStyle = `rgba(${30 + i * 3},${20 + i * 2},${60 - i * 3},0.9)`
+        ctx.fillStyle = `rgba(${30 + i*3},${20 + i*2},${60 - i*3},0.9)`
         ctx.fill()
       }
 
-      // thorax
       ctx.beginPath(); ctx.ellipse(0, -14, 6, 5, 0, 0, Math.PI * 2)
       ctx.fillStyle = 'rgba(40,25,80,0.92)'; ctx.fill()
 
-      // head
       ctx.beginPath(); ctx.arc(0, -20, 4.5, 0, Math.PI * 2)
       ctx.fillStyle = 'rgba(35,20,70,0.95)'; ctx.fill()
 
-      // compound eyes
       ;[[-3,-20],[3,-20]].forEach(([ex,ey]) => {
         ctx.beginPath(); ctx.arc(ex, ey, 2, 0, Math.PI * 2)
         ctx.fillStyle = 'rgba(200,160,0,0.9)'; ctx.fill()
@@ -194,9 +177,8 @@ export default function ButterflyFollower() {
         ctx.fillStyle = 'rgba(10,5,30,0.9)'; ctx.fill()
       })
 
-      // antennae
       ctx.strokeStyle = 'rgba(180,140,255,0.6)'
-      ctx.lineWidth = 0.8
+      ctx.lineWidth = 1.0
       ;[[-1,-24],[1,-24]].forEach(([sx,sy], i) => {
         const ex = i === 0 ? -18 : 18, ey = -52
         ctx.beginPath()
@@ -210,38 +192,40 @@ export default function ButterflyFollower() {
       ctx.restore()
     }
 
-    // ── Resize ─────────────────────────────────────────────────
     function resize() {
       const W = window.innerWidth
       const H = window.innerHeight
       stateRef.current.W = W
       stateRef.current.H = H
-      ;[bgC, pC, bC].forEach(c => { c.width = W; c.height = H })
-      drawBg()
+      ;[pC, bC].forEach(c => { c.width = W; c.height = H })
     }
 
-    // ── Animation loop ─────────────────────────────────────────
+    // Deteksi LoadingScreen aktif via class .kl-loading
+    function isLoadingActive() {
+      return !!document.querySelector('.kl-loading')
+    }
+
     function frame(now) {
       rafRef.current = requestAnimationFrame(frame)
       const s = stateRef.current
-      const dt = Math.min(now - s.prevNow, 50)
       s.prevNow = now
-
       const { W, H } = s
 
-      // init center if first frame
       if (s.bx === -999) { s.bx = W / 2; s.by = H / 2 }
 
+      // Fade in/out — lerp lambat agar transisi halus
+      s.targetOpacity = isLoadingActive() ? 0 : 1
+      s.opacity = lerp(s.opacity, s.targetOpacity, 0.07)
+      const visible = s.opacity > 0.01
+
+      // Fisika gerak
       const cx = s.mx > -999 ? s.mx : W / 2
       const cy = s.my > -999 ? s.my : H / 2
-
       const dx = cx - s.bx
       const dy = cy - s.by
       const dist = Math.sqrt(dx * dx + dy * dy)
 
-      const flapSpeed = 0.07 + Math.min(dist / 200, 0.14)
-      s.flapT += flapSpeed
-
+      s.flapT += 0.07 + Math.min(dist / 200, 0.14)
       s.vx = lerp(s.vx, dx * 0.07, 0.16)
       s.vy = lerp(s.vy, dy * 0.07, 0.16)
       s.bx += s.vx
@@ -252,38 +236,39 @@ export default function ButterflyFollower() {
         s.heading = angleLerp(s.heading, ta, 0.1)
       }
 
-      const spread = 0.14 + Math.abs(Math.sin(s.flapT)) * 0.86
-      const bob = Math.sin(s.flapT * 2) * 2.5
-      const speed = Math.sqrt(s.vx * s.vx + s.vy * s.vy)
-      const isMoving = speed > 0.5
+      const spread       = 0.14 + Math.abs(Math.sin(s.flapT)) * 0.86
+      const bob          = Math.sin(s.flapT * 2) * 2.5
+      const speed        = Math.sqrt(s.vx * s.vx + s.vy * s.vy)
+      const isMoving     = speed > 0.5
       const isDownstroke = Math.abs(Math.sin(s.flapT)) > 0.72
 
-      // ── Particles ──────────────────────────────────────────
+      // ── Partikel ───────────────────────────────────────────
       pX.clearRect(0, 0, W, H)
 
-      if (isMoving && isDownstroke && now - s.lastSpawn > 15) {
-        const n = 5 + Math.floor(Math.random() * 2)
-        for (let i = 0; i < n; i++) spawnParticle(s.bx, s.by, speed * 0.35)
-        s.lastSpawn = now
-      } else if (isMoving && now - s.lastSpawn > 35) {
-        const n = 2 + Math.floor(Math.random() * 2)
-        for (let i = 0; i < n; i++) spawnParticle(s.bx, s.by, speed * 0.2)
-        s.lastSpawn = now
-      } else if (!isMoving && now - s.lastSpawnIdle > 120) {
-        spawnParticle(s.bx, s.by, 0.4)
-        s.lastSpawnIdle = now
+      if (visible) {
+        if (isMoving && isDownstroke && now - s.lastSpawn > 18) {
+          const n = 3 + Math.floor(Math.random() * 2)
+          for (let i = 0; i < n; i++) spawnParticle(s.bx, s.by, speed * 0.3)
+          s.lastSpawn = now
+        } else if (isMoving && now - s.lastSpawn > 40) {
+          const n = 1 + Math.floor(Math.random() * 2)
+          for (let i = 0; i < n; i++) spawnParticle(s.bx, s.by, speed * 0.18)
+          s.lastSpawn = now
+        } else if (!isMoving && now - s.lastSpawnIdle > 150) {
+          spawnParticle(s.bx, s.by, 0.3)
+          s.lastSpawnIdle = now
+        }
       }
 
+      pX.globalAlpha = s.opacity
       for (let i = 0; i < POOL_SIZE; i++) {
         const p = pool[i]
         if (!p.active) continue
-        p.vy += 0.028
-        p.vx *= 0.97
-        p.x  += p.vx
-        p.y  += p.vy
-        p.life -= p.decay
-        p.tw   += 0.14
+        p.vy += 0.025; p.vx *= 0.97
+        p.x += p.vx; p.y += p.vy
+        p.life -= p.decay; p.tw += 0.14
         if (p.life <= 0) { p.active = false; continue }
+        if (!visible) continue
         const alpha = p.life * (0.7 + 0.3 * Math.sin(p.tw))
         const col   = COLORS[p.ci]
         const grd   = pX.createRadialGradient(p.x, p.y, 0, p.x, p.y, p.r * 3.5)
@@ -291,29 +276,33 @@ export default function ButterflyFollower() {
         grd.addColorStop(1, col + '0)')
         pX.fillStyle = grd
         pX.beginPath(); pX.arc(p.x, p.y, p.r * 3.5, 0, Math.PI * 2); pX.fill()
-        pX.beginPath(); pX.arc(p.x, p.y, p.r, 0, Math.PI * 2)
-        pX.fillStyle = col + alpha.toFixed(3) + ')'; pX.fill()
-        if (p.r > 1.4 && p.life > 0.4) {
-          const cs = p.r * 2.2
+        pX.fillStyle = col + alpha.toFixed(3) + ')'
+        pX.beginPath(); pX.arc(p.x, p.y, p.r, 0, Math.PI * 2); pX.fill()
+        if (p.r > 1.0 && p.life > 0.4) {
+          const cs = p.r * 2.0
           pX.strokeStyle = col + (alpha * 0.8).toFixed(3) + ')'
-          pX.lineWidth = 0.6
+          pX.lineWidth = 0.5
           pX.beginPath()
           pX.moveTo(p.x, p.y - cs); pX.lineTo(p.x, p.y + cs)
           pX.moveTo(p.x - cs, p.y); pX.lineTo(p.x + cs, p.y)
           pX.stroke()
         }
       }
+      pX.globalAlpha = 1
 
-      // ── Butterfly ──────────────────────────────────────────
+      // ── Kupu-kupu ──────────────────────────────────────────
       bX.clearRect(0, 0, W, H)
-      bX.save()
-      bX.translate(s.bx, s.by)
-      bX.rotate(s.heading)
-      drawButterfly(bX, spread, bob)
-      bX.restore()
+      if (visible) {
+        bX.save()
+        bX.globalAlpha = s.opacity
+        bX.translate(s.bx, s.by)
+        bX.rotate(s.heading)
+        bX.scale(SCALE, SCALE)
+        drawButterfly(bX, spread, bob)
+        bX.restore()
+      }
     }
 
-    // ── Event listeners ────────────────────────────────────────
     function onMouseMove(e) {
       stateRef.current.mx = e.clientX
       stateRef.current.my = e.clientY
@@ -343,22 +332,12 @@ export default function ButterflyFollower() {
 
   return (
     <>
-      <style>{`
-        /* Sembunyikan kursor default di seluruh halaman */
-        *, *::before, *::after { cursor: none !important; }
-      `}</style>
-
+      <style>{`*, *::before, *::after { cursor: none !important; }`}</style>
       <div
         ref={containerRef}
         aria-hidden="true"
-        style={{
-          position: 'fixed',
-          inset: 0,
-          zIndex: 99999,
-          pointerEvents: 'none',
-        }}
+        style={{ position:'fixed', inset:0, zIndex:99999, pointerEvents:'none' }}
       >
-        <canvas id="bf-bg"        style={{ position:'absolute', top:0, left:0 }} />
         <canvas id="bf-particle"  style={{ position:'absolute', top:0, left:0 }} />
         <canvas id="bf-butterfly" style={{ position:'absolute', top:0, left:0 }} />
       </div>
