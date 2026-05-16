@@ -1,8 +1,9 @@
 import '../styles/globals.css'
-import Navbar        from '@/components/layout/Navbar'
-import Footer        from '@/components/layout/Footer'
-import LoadingScreen from '@/components/ui/LoadingScreen'
-import { siteConfig } from '@/data/config'
+import Navbar           from '@/components/layout/Navbar'
+import Footer           from '@/components/layout/Footer'
+import LoadingScreen    from '@/components/ui/LoadingScreen'
+import ButterflyFollower from '@/components/ui/ButterflyFollower'
+import { siteConfig }   from '@/data/config'
 
 export const metadata = {
   title:       siteConfig.title,
@@ -18,11 +19,6 @@ export default function RootLayout({ children }) {
   return (
     <html lang="id">
       <head>
-        {/*
-          Font via Google Fonts link — cara ini bekerja di semua environment.
-          Di production Vercel, bisa diganti ke next/font/google untuk optimasi lebih lanjut:
-          import { Bebas_Neue, Work_Sans } from 'next/font/google'
-        */}
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         <link
@@ -31,6 +27,9 @@ export default function RootLayout({ children }) {
         />
       </head>
       <body>
+        {/* Kupu-kupu mengikuti kursor — z-index 99999, pointer-events none */}
+        <ButterflyFollower />
+
         <LoadingScreen name={siteConfig.name} />
         <Navbar />
         <main>{children}</main>
