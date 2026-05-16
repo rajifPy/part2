@@ -2,12 +2,6 @@
 
 import { useEffect, useRef } from 'react'
 
-/**
- * ButterflyFollower
- * Custom cursor — kupu-kupu mengikuti mouse dengan ekor partikel emas.
- * - Ukuran kecil (SCALE 0.38 dari koordinat asli)
- * - Otomatis fade-out saat LoadingScreen (.kl-loading) aktif di DOM
- */
 export default function ButterflyFollower() {
   const containerRef = useRef(null)
   const rafRef       = useRef(null)
@@ -20,6 +14,7 @@ export default function ButterflyFollower() {
     mouseInside: false,
     lastSpawn: 0,
     lastSpawnIdle: 0,
+    lastBroadcast: 0,
     prevNow: 0,
     W: 0, H: 0,
     opacity: 0,
@@ -36,10 +31,8 @@ export default function ButterflyFollower() {
     const pX = pC.getContext('2d')
     const bX = bC.getContext('2d')
 
-    // Skala kupu-kupu: 0.38 → sayap ~53px lebar total
     const SCALE = 0.38
 
-    // ── Particle pool ──────────────────────────────────────────
     const POOL_SIZE = 200
     const COLORS = [
       'rgba(255,200,40,',
@@ -83,7 +76,6 @@ export default function ButterflyFollower() {
       return a + d * t
     }
 
-    // ── Wing path — koordinat asli (akan di-scale via ctx.scale) ──
     function drawWingPath(ctx) {
       ctx.beginPath()
       ctx.moveTo(0, -2)
@@ -200,7 +192,6 @@ export default function ButterflyFollower() {
       ;[pC, bC].forEach(c => { c.width = W; c.height = H })
     }
 
-    // Deteksi LoadingScreen aktif via class .kl-loading
     function isLoadingActive() {
       return !!document.querySelector('.kl-loading')
     }
@@ -213,12 +204,10 @@ export default function ButterflyFollower() {
 
       if (s.bx === -999) { s.bx = W / 2; s.by = H / 2 }
 
-      // Fade in/out — lerp lambat agar transisi halus
       s.targetOpacity = isLoadingActive() ? 0 : 1
       s.opacity = lerp(s.opacity, s.targetOpacity, 0.07)
       const visible = s.opacity > 0.01
 
-      // Fisika gerak
       const cx = s.mx > -999 ? s.mx : W / 2
       const cy = s.my > -999 ? s.my : H / 2
       const dx = cx - s.bx
@@ -242,7 +231,15 @@ export default function ButterflyFollower() {
       const isMoving     = speed > 0.5
       const isDownstroke = Math.abs(Math.sin(s.flapT)) > 0.72
 
-      // ── Partikel ───────────────────────────────────────────
+      // ── Broadcast posisi ke hook useButterflyGlow (throttle 30ms) ──
+      if (visible && now - s.lastBroadcast > 30) {
+        window.dispatchEvent(new CustomEvent('butterfly:move', {
+          detail: { x: s.bx, y: s.by, opacity: s.opacity }
+        }))
+        s.lastBroadcast = now
+      }
+
+      // ── Partikel ──────────────────────────────────────────────────
       pX.clearRect(0, 0, W, H)
 
       if (visible) {
@@ -290,7 +287,7 @@ export default function ButterflyFollower() {
       }
       pX.globalAlpha = 1
 
-      // ── Kupu-kupu ──────────────────────────────────────────
+      // ── Gambar kupu-kupu ──────────────────────────────────────────
       bX.clearRect(0, 0, W, H)
       if (visible) {
         bX.save()
