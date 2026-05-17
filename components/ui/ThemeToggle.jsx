@@ -4,7 +4,7 @@ import { useEffect, useRef } from 'react'
 import { useTheme } from '@/contexts/ThemeContext'
 
 export default function ThemeToggle() {
-  const { isDark, toggle } = useTheme()
+  const { isDark, toggle, mounted } = useTheme()
   const trackRef = useRef(null)
 
   const triggerRipple = () => {
@@ -19,16 +19,24 @@ export default function ThemeToggle() {
     toggle()
   }
 
+  // Keyboard shortcut — pastikan toggle stabil (pakai ref agar tidak re-register tiap render)
+  const toggleRef = useRef(toggle)
+  useEffect(() => { toggleRef.current = toggle }, [toggle])
+
   useEffect(() => {
     const handler = (e) => {
       if (e.key === 'd' || e.key === 'D') {
         triggerRipple()
-        toggle()
+        toggleRef.current()
       }
     }
     document.addEventListener('keydown', handler)
     return () => document.removeEventListener('keydown', handler)
-  }, [toggle])
+  }, []) // ← dependency kosong: handler pakai toggleRef sehingga selalu fresh
+
+  // Hindari flash sebelum mounted (saat SSR isDark belum tahu dari localStorage)
+  // Track tetap render tapi thumb tidak berpindah sebelum mount
+  const isLight = mounted && !isDark
 
   return (
     <>
@@ -111,10 +119,10 @@ export default function ThemeToggle() {
         className="tt-toggle"
         onClick={handleToggle}
         aria-label="Toggle dark/light mode"
-        aria-pressed={isDark}
+        aria-pressed={!isDark}
         title="Toggle tema (tekan D)"
       >
-        <div className={`tt-track${isDark ? '' : ' light-mode'}`} ref={trackRef}>
+        <div className={`tt-track${isLight ? ' light-mode' : ''}`} ref={trackRef}>
           <div className="tt-thumb">
             <svg className="tt-icon" viewBox="0 0 24 24" aria-hidden="true">
               {isDark
@@ -124,7 +132,7 @@ export default function ThemeToggle() {
             </svg>
           </div>
         </div>
-        <span className="tt-label">{isDark ? 'Dark' : 'Light'}</span>
+        <span className="tt-label">{mounted ? (isDark ? 'Dark' : 'Light') : 'Dark'}</span>
       </button>
     </>
   )
