@@ -58,7 +58,6 @@ body {
   font-weight: 400;
   line-height: 1.55;
   -webkit-font-smoothing: antialiased;
-  /* prevent horizontal overflow on mobile */
   overflow-x: hidden;
 }
 
@@ -261,7 +260,6 @@ button {
   color: var(--color-black);
 }
 
-/* TOC mobile toggle button */
 .toc-toggle {
   display: none;
   width: 100%;
@@ -281,7 +279,6 @@ button {
   z-index: 50;
 }
 
-/* Pub filter bar */
 .pub-filter-bar {
   padding: 14px 40px;
   border-bottom: 1px solid #d0cec8;
@@ -345,7 +342,6 @@ button {
 
 /* ── RESPONSIVE: mobile ─────────────────────── */
 @media (max-width: 768px) {
-  /* Stack all page layouts */
   .page-layout { flex-direction: column; }
 
   .page-sidebar {
@@ -377,20 +373,17 @@ button {
   .name-bar       { padding: 12px 20px; }
   .pub-filter-bar { padding: 10px 20px; }
 
-  /* Row items: 2-col on mobile */
   .row-item {
     grid-template-columns: 80px 1fr;
     gap: 12px;
     padding: 16px 20px;
   }
 
-  /* Move the last child (READ arrow) under col 2 */
   .row-item > *:nth-child(3) {
     grid-column: 2;
     grid-row: 2;
   }
 
-  /* Work sidebar becomes collapsible TOC */
   .work-sidebar {
     width: 100%;
     position: static;
@@ -399,13 +392,9 @@ button {
     display: block;
   }
 
-  .work-sidebar__heading {
-    display: none; /* shown in TOC toggle instead */
-  }
-
+  .work-sidebar__heading { display: none; }
   .toc-toggle { display: flex; }
 
-  /* Research card: stack */
   .research-card {
     grid-template-columns: 1fr;
     min-height: auto;
@@ -418,14 +407,12 @@ button {
 
   .research-card__body { padding: 20px; }
 
-  /* Modal */
   .modal-overlay { background-color: rgba(26, 26, 26, 0.98); }
   .modal-inner {
     padding: 28px 20px 80px;
     min-height: 100vh;
   }
 
-  /* About email button full-width on mobile */
   .about-email-btn {
     width: 100%;
     justify-content: center;
@@ -479,19 +466,231 @@ button {
   .modal-inner { padding: 20px 16px 60px; }
 }
 
-/* ── LIGHT MODE OVERRIDE ────────────────────── */
-[data-theme="light"] {
-  --color-page-bg:     #f0eeea;
-  --color-sidebar-bg:  #e8e6e0;
+/* ═══════════════════════════════════════════════
+   THEME TRANSITIONS — smooth semua perubahan warna
+═══════════════════════════════════════════════ */
+html {
+  transition: background-color 0.35s ease;
 }
 
-/* Elemen yang perlu menyesuaikan tema */
-[data-theme="light"] body { background-color: #f0eeea; }
-[data-theme="dark"]  body { background-color: #1a1a1a; }
+body,
+main,
+aside,
+header,
+footer,
+section,
+div,
+p,
+h1, h2, h3, h4,
+span,
+a,
+button,
+input,
+nav {
+  transition:
+    background-color 0.35s ease,
+    color            0.25s ease,
+    border-color     0.25s ease,
+    box-shadow       0.25s ease;
+}
 
-/* Sidebar dark di semua halaman menjadi lebih terang di light mode */
-[data-theme="light"] .page-sidebar[style*="1a1a1a"],
-[data-theme="light"] aside[style*="1a1a1a"] {
+/* ═══════════════════════════════════════════════
+   LIGHT MODE OVERRIDES
+   Semua selector menggunakan [data-theme="light"]
+   di html element (di-set oleh ThemeContext)
+═══════════════════════════════════════════════ */
+
+/* ── Body & scrollbar ── */
+[data-theme="light"] body {
+  background-color: #f0eeea;
+  color: #1a1a1a;
+}
+[data-theme="light"] ::-webkit-scrollbar-track { background: #f0eeea; }
+[data-theme="light"] ::-webkit-scrollbar-thumb { background: #bbb; }
+
+/* ── Navbar top bar ── */
+[data-theme="light"] header > div:first-child {
+  background-color: #1a1a1a !important;
+}
+
+/* ── Home: panel kiri (tetap gelap, cukup sedikit lebih terang) ── */
+[data-theme="light"] .home-left {
+  background-color: #22221a !important;
+}
+
+/* ── Home: panel kanan ── */
+[data-theme="light"] .home-right {
   background-color: #e8e6e0 !important;
 }
-[data-theme="light"] .sidebar-heading { color: #1a1a1a !important; }
+[data-theme="light"] .home-right p[style],
+[data-theme="light"] .home-meta p {
+  color: rgba(26,26,26,0.35) !important;
+}
+[data-theme="light"] .home-nav-item {
+  border-bottom-color: rgba(26,26,26,0.1) !important;
+}
+[data-theme="light"] .home-nav-label { color: #1a1a1a !important; }
+[data-theme="light"] .home-nav-num   { color: rgba(26,26,26,0.2) !important; }
+[data-theme="light"] .home-nav-arrow { color: rgba(26,26,26,0.3) !important; }
+[data-theme="light"] .home-nav-item:hover .home-nav-arrow { color: #c94f35 !important; }
+
+/* ── Blog sidebar (sudah gelap, biarkan) ── */
+/* Blog main area */
+[data-theme="light"] .blog-mobile-filter {
+  background: #2a2a1a !important;
+}
+
+/* Blog cards */
+[data-theme="light"] .blog-card {
+  background: #ffffff !important;
+  border-color: #1a1a1a !important;
+  box-shadow: 4px 4px 0 #1a1a1a !important;
+}
+[data-theme="light"] .blog-card h2 { color: #1a1a1a !important; }
+[data-theme="light"] .blog-card p  { color: #555 !important; }
+[data-theme="light"] .blog-read-more { color: #1a1a1a !important; }
+
+/* Blog post main area */
+[data-theme="light"] .md-content p      { color: #2a2a2a !important; }
+[data-theme="light"] .md-content h2,
+[data-theme="light"] .md-content h3     { color: #1a1a1a !important; }
+[data-theme="light"] .md-content strong { color: #1a1a1a !important; }
+[data-theme="light"] .md-content em     { color: #444 !important; }
+[data-theme="light"] .md-content ul,
+[data-theme="light"] .md-content ol     { color: #2a2a2a !important; }
+[data-theme="light"] .md-content blockquote p { color: #444 !important; }
+[data-theme="light"] .md-content code   {
+  background: #e8e6e0 !important;
+  border-color: #d0cec8 !important;
+}
+[data-theme="light"] .md-content figcaption { color: #777 !important; }
+
+/* Related cards */
+[data-theme="light"] .related-card {
+  background: #ffffff !important;
+  border-color: #1a1a1a !important;
+  box-shadow: 3px 3px 0 #1a1a1a !important;
+}
+[data-theme="light"] .related-card p { color: #1a1a1a !important; }
+
+/* Post tags */
+[data-theme="light"] .post-tag {
+  color: #1a1a1a !important;
+  border-color: #1a1a1a !important;
+}
+[data-theme="light"] .post-tag:hover {
+  background-color: #1a1a1a !important;
+  color: #f0eeea !important;
+}
+
+/* ── Galeri main area ── */
+[data-theme="light"] .page-main {
+  background-color: #f0eeea !important;
+}
+
+/* Gallery card caption */
+[data-theme="light"] .page-main p[style*="color: rgb(26, 26, 26)"] {
+  color: #1a1a1a !important;
+}
+
+/* ── Pengalaman / Timeline ── */
+[data-theme="light"] .pgl-main   { background: #f0eeea !important; }
+[data-theme="light"] .pgl-mobile-filter { background: #1a1a1a !important; }
+
+/* Timeline spine */
+[data-theme="light"] .pgl-spine {
+  background: linear-gradient(to bottom, transparent, rgba(26,26,26,0.15) 5%, rgba(26,26,26,0.15) 95%, transparent) !important;
+}
+
+/* Era labels */
+[data-theme="light"] .pgl-era--top span { background: #1a1a1a !important; color: #f0eeea !important; }
+[data-theme="light"] .pgl-era--bot span { border-color: #ccc !important; color: #bbb !important; }
+
+/* Dot on spine */
+[data-theme="light"] .tl-dot {
+  box-shadow: 0 0 0 3px #f0eeea !important;
+}
+
+/* Timeline cards */
+[data-theme="light"] .tl-card {
+  background: #ffffff !important;
+  border-color: #1a1a1a !important;
+}
+[data-theme="light"] .tl-card__head { border-bottom-color: #e8e6e0 !important; }
+[data-theme="light"] .tl-title { color: #1a1a1a !important; }
+[data-theme="light"] .tl-desc  { color: #555 !important; }
+[data-theme="light"] .tl-year  { color: #888 !important; }
+[data-theme="light"] .tl-tag   { color: #777 !important; border-color: #d0cec8 !important; }
+
+/* Arrow inner (putih card) */
+[data-theme="light"] .tl-arrow--inner.tl-arrow--left  { border-left-color:  #fff !important; }
+[data-theme="light"] .tl-arrow--inner.tl-arrow--right { border-right-color: #fff !important; }
+
+/* ── Tentang Saya main area ── */
+[data-theme="light"] .ts-main { background-color: #f0eeea !important; }
+
+/* Stat cards */
+[data-theme="light"] .ts-main div[style*="border: 1px solid #d0cec8"] {
+  background: #ffffff !important;
+  border-color: #d0cec8 !important;
+}
+
+/* Skill bar track */
+[data-theme="light"] .ts-main div[style*="backgroundColor: #e0ddd7"],
+[data-theme="light"] .ts-main div[style*="background-color: rgb(224, 221, 215)"] {
+  background-color: #d0cec8 !important;
+}
+
+/* Skill bar label */
+[data-theme="light"] .ts-section-label { color: #999 !important; }
+
+/* Interest tags */
+[data-theme="light"] .ts-tag {
+  color: #1a1a1a !important;
+  border-color: #1a1a1a !important;
+}
+[data-theme="light"] .ts-tag:hover {
+  background-color: #1a1a1a !important;
+  color: #f0eeea !important;
+}
+
+/* Email CTA */
+[data-theme="light"] .ts-email-cta {
+  background-color: #1a1a1a !important;
+  border-color: #1a1a1a !important;
+  color: #f0eeea !important;
+}
+
+/* Bio text */
+[data-theme="light"] .ts-main .tr-inner {
+  color: #3a3a3a !important;
+}
+
+/* Quote mobile */
+[data-theme="light"] .ts-quote-mobile p { color: #555 !important; }
+
+/* CV button done msg */
+[data-theme="light"] .cv-dl-done-msg span { color: #555 !important; }
+
+/* ── Divider di tentang saya ── */
+[data-theme="light"] .ts-divider {
+  background: linear-gradient(to right, #c94f35, #8a7d3a 50%, #6b1f3a) !important;
+}
+
+/* ── Modal ── */
+[data-theme="light"] .modal-inner {
+  background-color: #f0eeea !important;
+}
+[data-theme="light"] .modal-inner p,
+[data-theme="light"] .modal-inner h2,
+[data-theme="light"] .modal-inner span { color: #1a1a1a !important; }
+
+/* ── Loading screen — tetap gelap di semua mode ── */
+[data-theme="light"] .kl-loading {
+  background: #1a1a1a !important;
+}
+
+/* ── Footer — tetap gelap di semua mode ── */
+[data-theme="light"] footer {
+  background-color: #1a1a1a !important;
+}
