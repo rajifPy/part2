@@ -4,6 +4,7 @@ import Link            from 'next/link'
 import { usePathname } from 'next/navigation'
 import { useState, useRef, useCallback, useEffect } from 'react'
 import { siteConfig }  from '@/data/config'
+import ThemeToggle from '@/components/ui/ThemeToggle'
 
 const TAB_COLORS = {
   '/':             '#8a7d3a',
@@ -289,6 +290,7 @@ export default function Navbar() {
           </Link>
 
           <div style={{ flex: 1, display: 'flex', justifyContent: 'flex-end' }}>
+            <ThemeToggle/>
             <button
               onClick={() => { playSound(); setMenuOpen(o => !o) }}
               aria-label="Toggle menu"
