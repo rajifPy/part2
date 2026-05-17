@@ -12,6 +12,7 @@ const SLIDE_PHOTOS = [
   { src: '/image/nafis.png'},
   { src: '/image/nafisprofile2.png'},
   { src: '/image/nafisprofile3.png'},
+   { src: '/image/nafisprofile4.png'},
 ]
 
 /* ══════════════════════════════════════════
