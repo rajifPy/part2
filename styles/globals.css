@@ -478,3 +478,20 @@ button {
 
   .modal-inner { padding: 20px 16px 60px; }
 }
+
+/* ── LIGHT MODE OVERRIDE ────────────────────── */
+[data-theme="light"] {
+  --color-page-bg:     #f0eeea;
+  --color-sidebar-bg:  #e8e6e0;
+}
+
+/* Elemen yang perlu menyesuaikan tema */
+[data-theme="light"] body { background-color: #f0eeea; }
+[data-theme="dark"]  body { background-color: #1a1a1a; }
+
+/* Sidebar dark di semua halaman menjadi lebih terang di light mode */
+[data-theme="light"] .page-sidebar[style*="1a1a1a"],
+[data-theme="light"] aside[style*="1a1a1a"] {
+  background-color: #e8e6e0 !important;
+}
+[data-theme="light"] .sidebar-heading { color: #1a1a1a !important; }
