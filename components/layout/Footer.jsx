@@ -1,7 +1,6 @@
 'use client'
 
 import { siteConfig } from '@/data/config'
-import ThemeToggle from '@/components/ui/ThemeToggle'
 
 const SOCIAL_LINKS = [
   {
@@ -73,11 +72,6 @@ export default function Footer() {
 
       {/* Divider tipis */}
       <div style={{ width: '100%', maxWidth: '320px', height: '1px', background: 'rgba(240,238,234,0.08)' }} />
-
-      {/* Theme Toggle */}
-      <div className="footer-theme-wrap">
-        <ThemeToggle />
-      </div>
 
       {/* Copyright */}
       <p className="footer-copy">
