@@ -1,40 +1,9 @@
 @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Work+Sans:wght@400;500;600;700&display=swap');
-@import './theme-vars.css';
 
 *, *::before, *::after {
   box-sizing: border-box;
   margin: 0;
   padding: 0;
-}
-
-:root,
-[data-theme="dark"] {
-  --clr-page-bg:      #f0eeea;   /* main content bg (sudah terang di dark mode) */
-  --clr-sidebar-dark: #1a1a1a;   /* sidebar gelap */
-  --clr-sidebar-alt:  #1e1e16;   /* home left panel */
-  --clr-card-bg:      #ffffff;
-  --clr-card-border:  #1a1a1a;
-  --clr-text-primary: #1a1a1a;
-  --clr-text-muted:   #666;
-  --clr-text-light:   #999;
-  --clr-divider:      #d0cec8;
-  --clr-accent:       #c94f35;
- 
-  /* home right panel */
-  --clr-home-right:   #f0eeea;
-  --clr-nav-label:    #1a1a1a;
-}
- 
-/* ── LIGHT MODE OVERRIDES ── */
-[data-theme="light"] {
-  --clr-page-bg:      #e8e6e0;
-  --clr-home-right:   #e8e6e0;
-  --clr-card-bg:      #ffffff;
-  --clr-card-border:  #1a1a1a;
-  --clr-text-primary: #1a1a1a;
-  --clr-text-muted:   #555;
-  --clr-text-light:   #888;
-  --clr-divider:      #c8c6c0;
 }
 
 :root {
