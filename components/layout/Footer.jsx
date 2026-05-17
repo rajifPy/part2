@@ -1,6 +1,7 @@
 'use client'
 
 import { siteConfig } from '@/data/config'
+import ThemeToggle from '@/components/ui/ThemeToggle'
 
 const SOCIAL_LINKS = [
   {
@@ -45,13 +46,24 @@ export default function Footer() {
         .footer-sep { width: 1px; height: 32px; background: rgba(240,238,234,0.08); flex-shrink: 0; }
         .footer-icons-row { display: flex; align-items: center; gap: 8px; }
         .footer-copy { font-family: 'Work Sans', sans-serif; font-size: 0.58rem; letter-spacing: 0.1em; text-transform: uppercase; color: rgba(240,238,234,0.2); }
+
+        /* Override warna ThemeToggle label agar cocok di footer gelap */
+        .footer-theme-wrap .tt-label { color: rgba(240,238,234,0.4) !important; }
+        .footer-theme-wrap .tt-label:hover { color: rgba(240,238,234,0.7) !important; }
       `}</style>
 
+      {/* Social icons */}
       <div className="footer-icons-row">
         {SOCIAL_LINKS.map((s, i) => (
           <span key={s.key} style={{ display: 'flex', alignItems: 'center' }}>
             {i > 0 && <span className="footer-sep" style={{ marginRight: '8px' }} />}
-            <a href={s.href} target={s.key === 'email' ? '_self' : '_blank'} rel="noopener noreferrer" className={`footer-icon-btn footer-icon-btn--${s.key}`} aria-label={s.label}>
+            <a
+              href={s.href}
+              target={s.key === 'email' ? '_self' : '_blank'}
+              rel="noopener noreferrer"
+              className={`footer-icon-btn footer-icon-btn--${s.key}`}
+              aria-label={s.label}
+            >
               <div className="footer-icon-circle">{s.icon}</div>
               <span className="footer-icon-label">{s.label}</span>
             </a>
@@ -59,6 +71,15 @@ export default function Footer() {
         ))}
       </div>
 
+      {/* Divider tipis */}
+      <div style={{ width: '100%', maxWidth: '320px', height: '1px', background: 'rgba(240,238,234,0.08)' }} />
+
+      {/* Theme Toggle */}
+      <div className="footer-theme-wrap">
+        <ThemeToggle />
+      </div>
+
+      {/* Copyright */}
       <p className="footer-copy">
         © {new Date().getFullYear()} {siteConfig.name} — editor @murfhi
       </p>
